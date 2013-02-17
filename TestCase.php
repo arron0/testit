@@ -1,0 +1,290 @@
+<?php
+/**
+ * Requires PHP Version 5.3 (min)
+ *
+ * @package Arron
+ * @subpackage TestIt
+ * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
+ * @license http://opensource.org/licenses/MIT MIT
+ */
+namespace Arron\TestIt;
+
+/**
+ * TestCase class definition
+ *
+ * @package Arron
+ * @subpackage TestIt
+ * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
+ * @license http://opensource.org/licenses/MIT MIT
+ */
+abstract class TestCase extends \PHPUnit_Framework_TestCase
+{
+	/** @var object */
+	private $testObject;
+
+	/** @var \Arron\TestIt\Tools\MockFactory */
+	private $MockFactory;
+
+	/** @var bool */
+	private $setupCheck;
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function setUp()
+	{
+		parent::setUp();
+		$this->resetFunctionLog();
+		$this->setupCheck = TRUE;
+	}
+
+	/**
+	 * @inheritdoc
+	 * @throws \ErrorException
+	 */
+	protected function checkRequirements()
+	{
+		parent::checkRequirements();
+		if (!$this->setupCheck) {
+			$reflection = new \ReflectionClass($this);
+			$class = $reflection->getMethod('setUp')->getDeclaringClass()->getName();
+			throw new \ErrorException("Method $class::setUp() or its descendant doesn't call parent::setUp().");
+		}
+	}
+
+	/**
+	 * @return object
+	 */
+	abstract protected function createTestObject();
+
+	/**
+	 * @return object
+	 */
+	protected function getTestObject()
+	{
+		if (is_null($this->testObject)) {
+			$this->testObject = $this->createTestObject();
+		}
+		return $this->testObject;
+	}
+
+	protected function mockGlobalFunction($name, $namespace = NULL)
+	{
+		$namespace = is_null($namespace) ? $this->getReflection($this)->getNamespaceName() : $namespace;
+		$this->getMockFactory()->createMockOfGlobalFunctionInNamespace($name, $namespace);
+	}
+
+	/**
+	 * @param string $className Name of the class
+	 * @param string $mockName  Name of the mock
+	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getMockedClass($className, $mockName)
+	{
+		return $this->getMockFactory()->getMock($mockName, $className);
+	}
+
+	/**
+	 * @return \Arron\TestIt\Tools\MockFactory
+	 */
+	protected function getMockFactory()
+	{
+		if (is_null($this->MockFactory)) {
+			$this->MockFactory = $this->createMockFactory();
+		}
+		return $this->MockFactory;
+	}
+
+	/**
+	 * @return \Arron\TestIt\Tools\MockFactory
+	 */
+	private function createMockFactory()
+	{
+		return Tools\MockFactory::getInstance();
+	}
+
+	/**
+	 * @param string $dependencyName
+	 * @param string $functionName
+	 * @param array|null $functionArguments NULL if you want to skip check
+	 * @param mixed|\Exception $result If instance of Exception it will be thrown
+	 *
+	 * @return void
+	 */
+	protected function expectDependencyCall($dependencyName, $functionName, $functionArguments = array(), $result = NULL)
+	{
+		$functionName = $dependencyName . '::' . $functionName;
+		$this->expectFunctionCall($functionName, $functionArguments, $result);
+	}
+
+	/**
+	 * @param string $name
+	 * @param array $arguments
+	 * @param mixed $expectedResult
+	 *
+	 * @return void
+	 */
+	private function expectFunctionCall($name, array $arguments = NULL, $expectedResult = NULL)
+	{
+		Tools\FunctionsCallLogger::expectFunctionCall($name, $arguments, $expectedResult);
+	}
+
+	/**
+	 * (I REALLY HATE this function and IMHO it is not to be used. There should be a getter!!)
+	 *
+	 * @param string $dependencyName
+	 * @param string $propertyName
+	 * @param mixed $propertyValue
+	 *
+	 * @return void
+	 */
+	protected function expectDependencyToHaveProperty($dependencyName, $propertyName, $propertyValue)
+	{
+		//@TODO
+		//$this->getMockLocator()->getService($dependencyName)->$propertyName = $propertyValue;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $value
+	 *
+	 * @return void
+	 */
+	protected function setPropertyInTestSubject($name, $value)
+	{
+		$reflection = $this->getTestSubjectReflection();
+		if ($reflection->hasProperty($name)) {
+			$property = $reflection->getProperty($name);
+			$property->setAccessible(TRUE);
+			$property->setValue($this->getTestObject(), $value);
+		}
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return mixed|null
+	 */
+	protected function getPropertyFromTestSubject($name)
+	{
+		$reflection = $this->getTestSubjectReflection();
+		if ($reflection->hasProperty($name)) {
+			$property = $reflection->getProperty($name);
+			$property->setAccessible(TRUE);
+			return $property->getValue($this->getTestObject());
+		}
+		return NULL;
+	}
+
+	/**
+	 * @param string $name
+	 * @param array $arguments
+	 *
+	 * @return mixed
+	 */
+	protected function callTestSubjectMethod($name, array $arguments = array())
+	{
+		$reflection = $this->getTestSubjectReflection();
+		if ($reflection->hasMethod($name)) {
+			$method = $reflection->getMethod($name);
+			$method->setAccessible(TRUE);
+			return $method->invokeArgs($this->getTestObject(), $arguments);
+		}
+	}
+
+	/**
+	 * Try to call method on the object. It will be called if exists and accesssible. No error state set if not.
+	 *
+	 * @param string $name Method name
+	 * @param string $object     Object to call method on
+	 * @param array  $arguments  Arguments
+	 *
+	 * @return mixed
+	 */
+	protected function tryCallMethodOnObject($name, $object, array $arguments = array())
+	{
+		$reflection = $this->getReflection($object);
+		if ($reflection->hasMethod($name)) {
+			$method = $reflection->getMethod($name);
+			return $method->invokeArgs($object, $arguments);
+		}
+		return NULL;
+	}
+
+	/**
+	 * @return \ReflectionClass
+	 */
+	protected function getTestSubjectReflection()
+	{
+		return $this->getReflection($this->getTestObject());
+	}
+
+	/**
+	 * @param object|string $argument
+	 * @return \ReflectionClass
+	 */
+	protected function getReflection($argument)
+	{
+		return new \ReflectionClass($argument);
+	}
+
+	/**
+	 * Test any setter in test subject class
+	 *
+	 * @param string $setterName
+	 * @param mixed $testValue
+	 * @param null|string $propertyName
+	 *
+	 * @return void
+	 */
+	protected function setterTest($setterName, $testValue, $propertyName = NULL)
+	{
+		if (is_null($propertyName)) {
+			$propertyName = substr($setterName, 3);
+			$propertyName = lcfirst($propertyName);
+		}
+
+		$this->getTestObject()->$setterName($testValue);
+
+		$this->assertEquals($testValue, $this->getPropertyFromTestSubject($propertyName));
+	}
+
+	/**
+	 * Hook into PHPUnit's test runner to assert more stuff.
+	 *
+	 * @return void
+	 */
+	protected function assertPostConditions()
+	{
+		parent::assertPostConditions();
+		$this->assertUncalledDependencies();
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function assertUncalledDependencies()
+	{
+		$uncalledFunctions = $this->getUnalledDependencies();
+
+		if (is_array($uncalledFunctions) && (count($uncalledFunctions) > 0)) {
+			$this->fail("'" . implode(', ', $uncalledFunctions) . "' expected to be called but wasn't/weren't.");
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function resetFunctionLog()
+	{
+		Tools\FunctionsCallLogger::reset();
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getUnalledDependencies()
+	{
+		return Tools\FunctionsCallLogger::getExpectedFunctions();
+	}
+}
