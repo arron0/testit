@@ -1,5 +1,6 @@
 {
 	"name" : "arron/testit",
+	"license": "MIT",
 	"require": {
 		"php": ">=5.3.3",
 		"phpunit/phpunit": "3.7.14"
