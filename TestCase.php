@@ -87,7 +87,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return \Arron\TestIt\Tools\MockFactory
 	 */
-	protected function getMockFactory()
+	private function getMockFactory()
 	{
 		if (is_null($this->MockFactory)) {
 			$this->MockFactory = $this->createMockFactory();
