@@ -4,5 +4,8 @@
 	"require": {
 		"php": ">=5.3.3",
 		"phpunit/phpunit": "3.7.14"
+	},
+	"autoload": {
+		"classmap": ["Tool/", "", "TestCase.php"]
 	}
 }
