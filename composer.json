@@ -6,6 +6,6 @@
 		"phpunit/phpunit": "3.7.14"
 	},
 	"autoload": {
-		"classmap": ["Tool/", "", "TestCase.php"]
+		"classmap": ["Tools/", "", "TestCase.php"]
 	}
 }
