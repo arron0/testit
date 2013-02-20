@@ -14,7 +14,7 @@
 		"phpunit/phpunit": ">3.7,<=3.7.14"
 	},
 	"autoload": {
-		"classmap": ["Tools/", "", "TestCase.php"]
+		"classmap": ["TestIt/"]
 	},
 	"authors": [
 		{
