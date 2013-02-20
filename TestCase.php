@@ -23,7 +23,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	private $testObject;
 
 	/** @var \Arron\TestIt\Tools\MockFactory */
-	private $MockFactory;
+	private $mockFactory;
 
 	/** @var bool */
 	private $setupCheck;
@@ -89,10 +89,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	private function getMockFactory()
 	{
-		if (is_null($this->MockFactory)) {
-			$this->MockFactory = $this->createMockFactory();
+		if (is_null($this->mockFactory)) {
+			$this->mockFactory = $this->createMockFactory();
 		}
-		return $this->MockFactory;
+		return $this->mockFactory;
 	}
 
 	/**
