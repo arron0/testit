@@ -105,16 +105,16 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @param string $dependencyName
-	 * @param string $functionName
-	 * @param array|null $functionArguments NULL if you want to skip check
-	 * @param mixed|\Exception $result If instance of Exception it will be thrown
+	 * @param string $methodName
+	 * @param array|null $methodArguments NULL if you want to skip check
+	 * @param mixed|\Exception $returnValue If instance of Exception it will be thrown
 	 *
 	 * @return void
 	 */
-	protected function expectDependencyCall($dependencyName, $functionName, $functionArguments = array(), $result = NULL)
+	protected function expectDependencyCall($dependencyName, $methodName, $methodArguments = array(), $returnValue = NULL)
 	{
-		$functionName = $dependencyName . '::' . $functionName;
-		$this->expectFunctionCall($functionName, $functionArguments, $result);
+		$methodName = $dependencyName . '::' . $methodName;
+		$this->expectFunctionCall($methodName, $methodArguments, $returnValue);
 	}
 
 	/**
