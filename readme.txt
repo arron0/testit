@@ -28,7 +28,35 @@ All you have to do is to pass the mock to your class you are testing to be calle
 Creating mocks of global funtions
 ---------------------------------
 
-Comming soon...stay tuned...
+TestIt allowes you to mock global functions. Do it by calling mockGlobalFunction function.
+
+/---code php
+protected function mockGlobalFunction($name, $namespace = NULL)
+
+
+//just call it before using global function
+$this->mockGlobalFunction('time', '\YourNamespace');
+//and than expect the call
+$this->expectDependencyCall('global', 'time', array(), 123456789);
+\---
+
+Namespace argument is the namespace your time() function is called from. If not provided, it will be set to the namespace mockGlobalFunction is called from.
+
+This is done by a namespace trick. If you are in namespace and call function, it will be searched first in the current namespace and than in the global space.
+So if not defined in the namespace, it will fallback to global function. mockGlobalFunction will define mock of the function in specific namespace so the call will no longer
+fallback to global space and mocked function will be called. Notice, that once the function is defined in some namespace, it will be called from anywhere in this namespace.
+Nevertheless TestIt will chceck and won't redefine it again. But in terms of readability of your code, call mockGlobalFunction everywhere you need it to be clear you are mocking something.
+
+Therefore there is limitation here. You can mock only functions that are called with unqualified name.
+
+/---code php
+$timestamp = time();//can be mocked
+
+$timestamp = \time();//can NOT be mocked
+\---
+
+There is one thing that is not working yet. Functions with output argument can be mocked but output argument won't work. The main problem is, how to detect output arguments? Any ideas? :-)
+
 
 Expectaions
 -----------
