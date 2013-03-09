@@ -1,11 +1,27 @@
 TestIt Library
-**************
+##############
 
 TestIt is an addon library for PHPUnit that extends mocking engine and allowes comfort testing of class interactions with surrounding environment.
 Are you tired using $this->getMock()->expects()->method()->with()->will() constructions? TestIt is for you :-)
 
-How to use it
-==============
+Usual unit test consists from several steps:
+- **data preparation** - prepare all data you'll need during the test. Input data, partial results (to return from mocked dependencies), expected results etc.
+- **mocking of dependencies** - creating of "fake" dependencies to not interact with the real environment during the test
+- **creating new instance of the object to test** - for every test new (clean) instance is necessary
+- **expecting what should happen** - defining expectations of dependencies calls and its behaviour (returning specific value, throwing exception etc.)
+- **putting instance of tested object to the defined state** - starting conditions are important for the test in order to be deterministic
+- **calling method (methods) on testing instance**
+- **asserting end conditions** - asserting that all expectations are met, all results are as expected and test instance is in expected end state
+
+TestIt can help you with most of the steps.
+
+Installation
+************
+
+Use "composer":http://getcomposer.org to install TestIt. Just add **arron/testit** project as your dependency.
+
+Testing with TestIt
+*******************
 
 TestIt offers own TestCase class that is inherited from \PHPUnit_Framework_TestCase and enhancing it with some features. It is ment to be base class for your tests.
 It is helping you with creating mocks of your class dependecies and verifying those dependecies are called as expected.
@@ -13,8 +29,22 @@ To use this features, just inherit your test base class from \Arron\TestIt\TestC
 
 The best way how to profit from this library is to integrate it to your tests so you will be able to use all those features even more easier.
 
-Creating mock of classes
-------------------------
+Creating of the object to test
+==============================
+
+There is abstract method createTestObject() defined in \Arron\TestIt\TestCasev namespace. It should return created instance ready to use for testing. So createTestObject() is tha right
+place for any inicialization mock injections etc. It will be called when you access the test object (getTestObject()) for the first time. So just concentrate on new object
+creation, the rest is in hands of TestIt :-)
+
+
+Mocking of dependencies
+=======================
+
+TestIt is helping you with creating of mocked classes. It contains something like object locator so, it is not creating new mock every time.
+But you can get the best value if you integrate TestIt capabilities with your DI.
+
+Creating mocked class
+---------------------
 You create mock by simply call simple method in your test claas:
 
 /---code php
@@ -32,7 +62,6 @@ TestIt allowes you to mock global functions. Do it by calling mockGlobalFunction
 
 /---code php
 protected function mockGlobalFunction($name, $namespace = NULL)
-
 
 //just call it before using global function
 $this->mockGlobalFunction('time', '\YourNamespace');
@@ -57,9 +86,8 @@ $timestamp = \time();//can NOT be mocked
 
 There is one thing that is not working yet. Functions with output argument can be mocked but output argument won't work. The main problem is, how to detect output arguments? Any ideas? :-)
 
-
-Expectaions
------------
+Expecting what should happen
+============================
 
 In your tests, you are testing inputs and outputs, but you also have to test class interactions with its dependencies. Meaning you have to test, that there were correct methods called
 with correct parameters in correct order. These metods usunally return some data so it is necessary to ensure, that this data will be returned.
@@ -73,6 +101,7 @@ public function expectDependencyCall($dependencyName, $methodName, $methodArgume
 //practical use
 $this->expectDependencyCall("articleModel", "get", array(10, 5), array());
 //expects that on the "articleModel" dependency "get" method will be called with arguments (offset, limit) 10, 5 and it will return empty array
+
 //valid call in tested class would be for example
 $this->articleModel->get(10,5); //where $this->articleModel is a property where mock named "articleModel" is stored
 \---
@@ -83,12 +112,57 @@ Optional arguments (with default value) can be omitted.
 As for return value, all values passed here will be returned by mock call unchanged except instances of \Exception class (and its ansestors of course). This instances will be thrown as exception.
 It allowes you to simulate cases where one of your dependecies failes.
 
-Assertions
-----------
+Defining state of tested object
+===============================
+
+Before launching the test, you must put tested object to defined state. Against this state you will assert changes after the test. In order to have real unit test,
+you shouln't use object's set methods etc. TestIt provides you two methods for this purpose.
+
+setPropertyInTestSubject
+------------------------
+
+/---code php
+protected function setPropertyInTestSubject($name, $value)
+
+//example
+$this->setPropertyInTestSubject('state', 'notReady'); //will set property 'state' to value 'notReady' in test object
+\---
+
+getPropertyFromTestSubject
+--------------------------
+
+/---code php
+protected function getPropertyFromTestSubject($name)
+
+//example
+$this->getPropertyFromTestSubject('state'); //return value of the 'state' property in test object
+\---
+
+You can set/get any defined property from tested object. It is using reflection. I noticed random occurences of errors here. I wasn't able to catch specific circumstances
+so far, but most of the time, it is working fine :-)
+
+Call method to test
+===================
+
+Use getTestObject() method to acces instance of test object. If not created yet, fresh instance will be created using the createTestObject() method.
+
+From time to time, it can be useful to call/test also a protected/private method. TestIt provides you a simple method to call these methods.
+/---code php
+protected function callTestSubjectMethod($name, array $arguments = array())
+
+//example
+$this->callTestSubjectMethod('setState', array('ready')); //will call 'setState' method with one argument 'ready',  even it is protected/private
+\---
+
+It is not a good habit to call inaccessible methods but it can be handy :-)
+
+Asserting end conditions
+========================
 
 TestIt will automatically assert your expectations. For every dependency call these assertions will be done runtime (in this order):
-  - correct method on correct dependency is called in correct order (defined by order of expectations)
-  - actual arguments of the method called is asserted against expected ones. If there is any of the methods arguments optional (with default value) and it is omitted,
-    default value will be filled to the expectation.
+- correct method on correct dependency is called in correct order (defined by order of expectations)
+- actual arguments of the method called is asserted against expected ones. If there is any of the methods arguments optional (with default value) and it is omitted,
+default value will be filled to the expectation.
 
 If any of this assertion fails the test will fail immediately. Meaningful error message is generated, so it is clear what should have heppened and what actually happened.
+
