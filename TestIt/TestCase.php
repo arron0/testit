@@ -130,21 +130,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * (I REALLY HATE this function and IMHO it is not to be used. There should be a getter!!)
-	 *
-	 * @param string $dependencyName
-	 * @param string $propertyName
-	 * @param mixed $propertyValue
-	 *
-	 * @return void
-	 */
-	protected function expectDependencyToHaveProperty($dependencyName, $propertyName, $propertyValue)
-	{
-		//@TODO
-		//$this->getMockLocator()->getService($dependencyName)->$propertyName = $propertyValue;
-	}
-
-	/**
 	 * @param string $name
 	 * @param mixed $value
 	 *
@@ -191,25 +176,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 			return $method->invokeArgs($this->getTestObject(), $arguments);
 		}
 		throw new \InvalidArgumentException("You are trying to call non-existing '$name' method on testing object.");
-	}
-
-	/**
-	 * Try to call method on the object. It will be called if exists and accesssible. No error state set if not.
-	 *
-	 * @param string $name Method name
-	 * @param string $object     Object to call method on
-	 * @param array  $arguments  Arguments
-	 *
-	 * @return mixed
-	 */
-	protected function tryCallMethodOnObject($name, $object, array $arguments = array())
-	{
-		$reflection = $this->getReflection($object);
-		if ($reflection->hasMethod($name)) {
-			$method = $reflection->getMethod($name);
-			return $method->invokeArgs($object, $arguments);
-		}
-		return NULL;
 	}
 
 	/**
