@@ -190,6 +190,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 			$method->setAccessible(TRUE);
 			return $method->invokeArgs($this->getTestObject(), $arguments);
 		}
+		throw new \InvalidArgumentException("You are trying to call non-existing '$name' method on testing object.");
 	}
 
 	/**
