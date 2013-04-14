@@ -1,7 +1,7 @@
 TestIt Library
 ##############
 
-TestIt is an addon library for PHPUnit that extends mocking engine and allowes comfort testing of class interactions with surrounding environment.
+TestIt is an add-on library for PHPUnit that extends mocking engine and allows comfort testing of class interactions with surrounding environment.
 Are you tired using $this->getMock()->expects()->method()->with()->will() constructions? TestIt is for you :-)
 
 Usual unit test consists from several steps:
@@ -23,19 +23,16 @@ Use "composer":http://getcomposer.org to install TestIt. Just add **arron/testit
 Testing with TestIt
 *******************
 
-TestIt offers own TestCase class that is inherited from \PHPUnit_Framework_TestCase and enhancing it with some features. It is ment to be base class for your tests.
-It is helping you with creating mocks of your class dependecies and verifying those dependecies are called as expected.
+TestIt offers own TestCase class that is inherited from \PHPUnit_Framework_TestCase and enhancing it with some features. It is meant to be base class for your tests.
+It is helping you with creating mocks of your class dependencies and verifying those dependencies are called as expected.
 To use this features, just inherit your test base class from \Arron\TestIt\TestCase class and you are free to go.
 
-The best way how to profit from this library is to integrate it to your tests so you will be able to use all those features even more easier.
+The best way how to profit from this library is to integrate it to your tests so you will be able to use all those features even more easily.
 
 Creating of the object to test
 ==============================
 
-There is abstract method createTestObject() defined in \Arron\TestIt\TestCasev namespace. It should return created instance ready to use for testing. So createTestObject() is tha right
-place for any inicialization mock injections etc. It will be called when you access the test object (getTestObject()) for the first time. So just concentrate on new object
-creation, the rest is in hands of TestIt :-)
-
+There is abstract method createTestObject() defined in \Arron\TestIt\TestCase namespace. It should return created instance ready to use for testing. So createTestObject() is the right place for any initialization mock injections etc. It will be called when you access the test object (getTestObject()) for the first time. So just concentrate on new object creation, the rest is in hands of TestIt :-)
 
 Mocking of dependencies
 =======================
@@ -45,36 +42,36 @@ But you can get the best value if you integrate TestIt capabilities with your DI
 
 Creating mocked class
 ---------------------
-You create mock by simply call simple method in your test claas:
+You create mock by simply call simple method in your test class:
 
 /---code php
 $mock = $this->getMockedClass($className, $mockName);
 \---
 
-Notice that all created mocks has to have unique name. With this name, you are referencing them in your expectations. It also allowes you to have more mocks of the same class (with different names).
+Notice that all created mocks have to have unique name. With this name, you are referencing them in your expectations. It also allows you to have more mocks of the same class (with different names).
 Mock-creation engine uses native PHPUnit mocking, automatically mocking all public methods and adds call tracking feature.
 All you have to do is to pass the mock to your class you are testing to be called from there.
 
-Creating mocks of global funtions
+Creating mocks of global functions
 ---------------------------------
 
-TestIt allowes you to mock global functions. Do it by calling mockGlobalFunction function.
+TestIt allows you to mock global functions. Do it by calling mockGlobalFunction function.
 
 /---code php
 protected function mockGlobalFunction($name, $namespace = NULL)
 
 //just call it before using global function
 $this->mockGlobalFunction('time', '\YourNamespace');
-//and than expect the call
+//and then expect the call
 $this->expectDependencyCall('global', 'time', array(), 123456789);
 \---
 
 Namespace argument is the namespace your time() function is called from. If not provided, it will be set to the namespace mockGlobalFunction is called from.
 
-This is done by a namespace trick. If you are in namespace and call function, it will be searched first in the current namespace and than in the global space.
-So if not defined in the namespace, it will fallback to global function. mockGlobalFunction will define mock of the function in specific namespace so the call will no longer
-fallback to global space and mocked function will be called. Notice, that once the function is defined in some namespace, it will be called from anywhere in this namespace.
-Nevertheless TestIt will chceck and won't redefine it again. But in terms of readability of your code, call mockGlobalFunction everywhere you need it to be clear you are mocking something.
+This is done by a namespace trick. If you are in namespace and call function, it will be searched first in the current namespace and then in the global space.
+So if not defined in the namespace, it will fall-back to global function. mockGlobalFunction will define mock of the function in specific namespace so the call will no longer
+fall-back to global space and mocked function will be called. Notice, that once the function is defined in some namespace, it will be called from anywhere in this namespace.
+Nevertheless TestIt will check and won't redefine it again. But in terms of readability of your code, call mockGlobalFunction everywhere you need it to be clear you are mocking something.
 
 Therefore there is limitation here. You can mock only functions that are called with unqualified name.
 
@@ -89,8 +86,7 @@ There is one thing that is not working yet. Functions with output argument can b
 Expecting what should happen
 ============================
 
-In your tests, you are testing inputs and outputs, but you also have to test class interactions with its dependencies. Meaning you have to test, that there were correct methods called
-with correct parameters in correct order. These metods usunally return some data so it is necessary to ensure, that this data will be returned.
+In your tests, you are testing inputs and outputs, but you also have to test class interactions with its dependencies. Meaning you have to test, that there were correct methods called with correct parameters in correct order. These methods usually return some data so it is necessary to ensure, that this data will be returned.
 
 In TestIt it is very easy to do so.
 
@@ -106,17 +102,17 @@ $this->expectDependencyCall("articleModel", "get", array(10, 5), array());
 $this->articleModel->get(10,5); //where $this->articleModel is a property where mock named "articleModel" is stored
 \---
 
-Methods arguments will be expected to be exacly the same as you passed them (in the array). Empty array means no arguments, NULL means that you don't care so any arguments will be accepted.
+Methods arguments will be expected to be exactly the same as you passed them (in the array). Empty array means no arguments, NULL means that you don't care so any arguments will be accepted.
 Optional arguments (with default value) can be omitted.
 
-As for return value, all values passed here will be returned by mock call unchanged except instances of \Exception class (and its ansestors of course). This instances will be thrown as exception.
-It allowes you to simulate cases where one of your dependecies failes.
+As for return value, all values passed here will be returned by mock call unchanged except instances of \Exception class (and its ancestors of course). These instances will be thrown as exception.
+It allows you to simulate cases where one of your dependencies fails.
 
 Defining state of tested object
 ===============================
 
 Before launching the test, you must put tested object to defined state. Against this state you will assert changes after the test. In order to have real unit test,
-you shouln't use object's set methods etc. TestIt provides you two methods for this purpose.
+you shouldn’t use object's set methods etc. TestIt provides you two methods for this purpose.
 
 setPropertyInTestSubject
 ------------------------
@@ -138,13 +134,13 @@ protected function getPropertyFromTestSubject($name)
 $this->getPropertyFromTestSubject('state'); //return value of the 'state' property in test object
 \---
 
-You can set/get any defined property from tested object. It is using reflection. I noticed random occurences of errors here. I wasn't able to catch specific circumstances
+You can set/get any defined property from tested object. It is using reflection. I noticed random occurrences of errors here. I wasn't able to catch specific circumstances
 so far, but most of the time, it is working fine :-)
 
 Call method to test
 ===================
 
-Use getTestObject() method to acces instance of test object. If not created yet, fresh instance will be created using the createTestObject() method.
+Use getTestObject() method to access instance of test object. If not created yet, fresh instance will be created using the createTestObject() method.
 
 From time to time, it can be useful to call/test also a protected/private method. TestIt provides you a simple method to call these methods.
 /---code php
@@ -161,8 +157,6 @@ Asserting end conditions
 
 TestIt will automatically assert your expectations. For every dependency call these assertions will be done runtime (in this order):
 - correct method on correct dependency is called in correct order (defined by order of expectations)
-- actual arguments of the method called is asserted against expected ones. If there is any of the methods arguments optional (with default value) and it is omitted,
-default value will be filled to the expectation.
-
-If any of this assertion fails the test will fail immediately. Meaningful error message is generated, so it is clear what should have heppened and what actually happened.
+- actual arguments of the method called are asserted against expected ones. If there is any of the methods arguments optional (with default value) and it is omitted, default value will be filled to the expectation.
+If any of this assertion fails the test will fail immediately. Meaningful error message is generated, so it is clear what should have happened and what actually happened.
 
