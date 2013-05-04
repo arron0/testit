@@ -29,10 +29,13 @@ To use this features, just inherit your test base class from \Arron\TestIt\TestC
 
 The best way how to profit from this library is to integrate it to your tests so you will be able to use all those features even more easily.
 
+**For examples, check examples directory.**
+
 Creating of the object to test
 ==============================
 
-There is abstract method createTestObject() defined in \Arron\TestIt\TestCase namespace. It should return created instance ready to use for testing. So createTestObject() is the right place for any initialization mock injections etc. It will be called when you access the test object (getTestObject()) for the first time. So just concentrate on new object creation, the rest is in hands of TestIt :-)
+There is abstract method createTestObject() defined in \Arron\TestIt\TestCase namespace. It should return created instance ready to use for testing. So createTestObject() is the right place for any initialization mock injections etc. It will be called during the setUp call. So just concentrate on new object creation, the rest is in hands of TestIt :-)
+If you need to call any expectations about any dependencies called in the time of test object creation, overwrite **inicializationExpectations** method and place your expectations there. This method will be called just before object creation in the setUp method.
 
 Mocking of dependencies
 =======================
