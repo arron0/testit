@@ -160,10 +160,7 @@ class MockFactory
 	protected function mockClass($mockName, $className)
 	{
 		$reflection = new \ReflectionClass($className);
-		$mock = \PHPUnit_Framework_MockObject_Generator::getMock(
-			$className,
-			array(), array(), $mockName, FALSE, FALSE, TRUE, FALSE
-		);
+		$mock = \PHPUnit_Framework_MockObject_Generator::getMock($className, array(), array(), $mockName, FALSE, FALSE, TRUE, FALSE);
 
 		$publicMethods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
