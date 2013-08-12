@@ -35,7 +35,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		$this->resetFunctionLog();
-		$this->inicializationExpectations();
+		$this->initializationExpectations();
 		$this->testObject = $this->createTestObject();
 		$this->setupCheck = TRUE;
 	}
@@ -59,7 +59,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	abstract protected function createTestObject();
 
-	protected function inicializationExpectations()
+	protected function initializationExpectations()
 	{
 		//intentionally empty, prepared to be overwritten
 	}

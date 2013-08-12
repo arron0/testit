@@ -35,7 +35,7 @@ Creating of the object to test
 ==============================
 
 There is abstract method createTestObject() defined in \Arron\TestIt\TestCase namespace. It should return created instance ready to use for testing. So createTestObject() is the right place for any initialization mock injections etc. It will be called during the setUp call. So just concentrate on new object creation, the rest is in hands of TestIt :-)
-If you need to call any expectations about any dependencies called in the time of test object creation, overwrite **inicializationExpectations** method and place your expectations there. This method will be called just before object creation in the setUp method.
+If you need to call any expectations about any dependencies called in the time of test object creation, overwrite **initializationExpectations** method and place your expectations there. This method will be called just before object creation in the setUp method.
 
 Mocking of dependencies
 =======================

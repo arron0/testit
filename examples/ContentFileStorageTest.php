@@ -35,7 +35,7 @@ class ContentFileStorageTest extends \Arron\TestIt\TestCase
 		parent::setUp();
 	}
 
-	protected function inicializationExpectations()
+	protected function initializationExpectations()
 	{
 		$this->expectDependencyCall('global', 'is_dir', array('testDir/content'), TRUE);
 	}
