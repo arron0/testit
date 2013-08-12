@@ -201,7 +201,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @param object|string $argument
-	 * 
+	 *
 	 * @return \ReflectionClass
 	 */
 	protected function getReflection($argument)
@@ -246,7 +246,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function assertUncalledDependencies()
 	{
-		$uncalledFunctions = $this->getUnalledDependencies();
+		$uncalledFunctions = $this->getUncalledDependencies();
 
 		if (is_array($uncalledFunctions) && (count($uncalledFunctions) > 0)) {
 			$this->fail("'" . implode(', ', $uncalledFunctions) . "' expected to be called but wasn't/weren't.");
@@ -264,7 +264,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return array
 	 */
-	private function getUnalledDependencies()
+	private function getUncalledDependencies()
 	{
 		return Tools\FunctionsCallLogger::getExpectedFunctions();
 	}
