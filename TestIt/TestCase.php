@@ -72,6 +72,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $this->testObject;
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $namespace
+	 *
+	 * @return void
+	 */
 	protected function mockGlobalFunction($name, $namespace = NULL)
 	{
 		$namespace = is_null($namespace) ? $this->getReflection($this)->getNamespaceName() : $namespace;
@@ -79,8 +85,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @param string $className Name of the class
-	 * @param string $mockName  Name of the mock
+	 * @param string $className
+	 * @param string $mockName
+	 *
 	 * @return \PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected function getMockedClass($className, $mockName)
@@ -169,6 +176,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param string $name
 	 * @param array $arguments
 	 *
+	 * @throws \InvalidArgumentException
+	 *
 	 * @return mixed
 	 */
 	protected function callTestSubjectMethod($name, array $arguments = array())
@@ -192,6 +201,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @param object|string $argument
+	 * 
 	 * @return \ReflectionClass
 	 */
 	protected function getReflection($argument)

@@ -10,7 +10,7 @@
 namespace Arron\TestIt\Tools;
 
 /**
- * FunctionsCallLogger class definition
+ * MockFactory class definition
  *
  * @package Arron
  * @subpackage TestIt
