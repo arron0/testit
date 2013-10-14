@@ -18,10 +18,9 @@
 	Nettista)? Prostě jsem neměl tu potřebu a PHPUnit vyhovoval všem mým požadavkům. Tedy skoro všem.
 </p>
 <p>
-	Ačkoliv má PHPUnit skvělé nástroje pro vytváření mocků, definice očekávaných volání (tzn. expectů; omlouvám se všem vlastencům, ale v dalším textu budu počešťovat tento anglický termín)
-	je krajně nepřehledná, zdlouhavá a nudná.
-	Nejdříve jsem chtěl použít nějaký jiný nástroj (třeba
-	Mockista), synax je ale u všech těchto nástrojů podobně zdlouhavá, že to z mého pohledu nemělo smysl.
+	Ačkoliv má PHPUnit skvělé nástroje pro vytváření mocků, definice očekávaných volání (tzn. expectů; omlouvám se všem vlastencům, ale v dalším textu budu počešťovat anglický termín expect)
+	je krajně nepřehledná, zdlouhavá a nudná. Nejdříve jsem chtěl použít nějaký jiný nástroj (třeba Mockista),
+	synax je ale u všech těchto nástrojů podobná.
 </p>
 <p>
 	Co se má v testu stát, když nenadefinuji žádný expect? Osobně mám za to, že když se stane něco, co neočekávám (čili jsem nenadefinoval žádné
@@ -41,7 +40,22 @@
 </p>
 <p>
 	TestIt je jednoduchá knihovna, která definuje vlastní TestCase třídu. Ta rozšiřuje možnosti PHPUnitu, ale přitom programátorovi nic nenutí, stále
-	je možné používat všechny běžné konstrukce.
+	je možné používat všechny běžné konstrukce. TestIt ale používá rozdílnou filozofii pří práci s mocky. Běžně se s mocky pracuje tak,
+	že se vytvoří mock a následně se definuje, jak se tento mock má chovat:
+</p>
+<pre>
+	//příklad je převzatý z dokumentace PHPUnitu
+	$observer = $this->getMock('Observer', array('update'));
+	$observer
+			->expects($this->once())
+			->method('update')
+			->with($this->equalTo('something'));
+</pre>
+<p>
+	To je ale nepraktické, protože v každém testu je potřeba mock definovat, získat jeho instanci a pomocí poměrně zdlouhavého zápisu upravit jeho chování.
+	Při použítí knihovny TestIt stačí definovat všechny mocky na jednom místě (při vytváření testovaného objektu) a v jednotlivých testech již pouze definovat
+	očekávané chování testovaného objektu. O mocky už se v testech nemusíme starat, jen definujeme jaká volání závislostí očekáváme, s jakými parametry
+	a co se nám hodí, aby nám daná závislost v daném testu vrátila.
 </p>
 <h2>
 	Instalace
@@ -64,7 +78,7 @@
 </h2>
 <p>
 	Knihovnu použijeme velmi jednoduše. Stačí náš test podědit od třídy \Arron\TestIt\TestCase. Ta má jednu abstraktní metodu, createTestObject(). Tato
-	metoda se nestará o nic víc, než o vytvoření a
+	metoda se má starat o vytvoření a
 	vrácení nové hotové instance objektu, který se chystáme testovat. O zbytek (uložení tohoto objektu a podobně) se již nemusíme starat. Pro každý
 	test bude vytvořena nová instance.
 </p>
@@ -72,9 +86,9 @@
 	Pojmenované závislosti
 </h2>
 <p>
-	Každá závislost musí být v testu pojmenovaná. Má to dvě zásadní výhody. První, můžeme se na danou závislost jednoduše odkázat. Druhá, můžeme
+	Každá závislost musí být v testu pojmenovaná (mít alias chcete-li). Má to dvě zásadní výhody. První, můžeme se na danou závislost jednoduše odkázat. Druhá, můžeme
 	definovat dvě závislosti stejného typu, ale s jiným
-	jménem. Pojďme si ukázat přiklad. Mějme jednoduchou třídu, která slouží jako model pro načítání dat (v tomto případě jednoduché načítání obsahu z
+	jménem (například dvě připojení do databáze). Pojďme si ukázat přiklad. Mějme jednoduchou třídu, která slouží jako model pro načítání dat (v tomto případě jednoduché načítání obsahu z
 	nějakého úložiště):
 </p>
 <pre>
@@ -158,12 +172,11 @@ public function testSave()
 </pre>
 <p>
 	Jak vidíte, test je opravdu velmi jednoduchý a přímočarý. Klíčovou metodou je zde expectDependencyCall(). Na rozdíl od běžné PHPUnit konstrukce pro
-	psaní expectů shrnuje vše potřebné do jednoho
-	volání. Prvním parametrem je název závislosti, druhým parametrem je název metody, kterou očekáváme, že se zavolá. Následuje výčet očekávaných
-	parametrů (v poli) a návratová hodnota, kterou chceme,
-	aby mock vrátil. V testu pak voláme testovanou metodu. Při tom využíváme metodu getTestObject(), která vrátí instanci testovaného objektu. Dále se
-	o nic nemusíme starat, TestIt provede veškeré
-	kontroly za nás a v případě, že některé předpoklady nevyhovují, tak nás na to upozorní a test selže.
+	psaní expectů shrnuje vše potřebné do jednoho volání.
+	Prvním parametrem je název závislosti, druhým parametrem je název metody, kterou očekáváme, že se na dané závislosti zavolá. Následuje výčet očekávaných
+	parametrů (v poli) a návratová hodnota, kterou chceme, aby závislost vrátila. V testu pak voláme testovanou metodu. Při tom využíváme metodu getTestObject(),
+	která vrátí instanci testovaného objektu. Dále se o nic nemusíme starat, TestIt provede veškeré
+	kontroly za nás a v případě, že některé předpoklady nevyhovují, tak test selže.
 </p>
 <p>
 	Pořadí volání expectDependencyCall zároveň určuje pořadí, ve kterém očekáváme, že budou závislosti volány. TestIt toto hlídá a pokud se zavolá jakákoliv závislost
@@ -182,7 +195,7 @@ public function testSave()
 	Často se stane, že potřebujeme otestovat, co se stane, když nějaké volání závislosti vyhodí vyjímku. Například v metodě load v předchozím příkladu
 	modelu. TestIt si i s tímto případem dokáže
 	jednoduše poradit. Pokud metodě expectDependencyCall() předáme jako návratovou hodnotu instanci třídy \Exception (či jakéhokoliv jejího potomka),
-	potom zavolání příslužné závislosti danou instanci nevrátí, ale tuto instanci vyhodí jako vyjímku. V testu to vypadá takto:
+	potom zavolání příslušné závislosti danou instanci nevrátí, ale tuto instanci vyhodí jako vyjímku. V testu to vypadá takto:
 </p>
 <pre>
 public function testLoadNotFound()
@@ -325,30 +338,24 @@ class ContentFileStorageTest extends \Arron\TestIt\TestCase
 </pre>
 <p>
 	Volání metody mockGlobalFunction vytvoří mock předané funkce v daném jmenném prostoru. Metodu je potřeba zavolat kdykoliv před prvním voláním
-	mockované funkce. Metoda setUp je asi tím nejlepším
-	místem, kde mít tyto mocky všechny pohromadě pro daný test case. Metodu mockGlobalFunction můžete volat i vícekrát se stejným názvem funkce,
-	TestIt si ohlídá, aby nedefinoval jednu funkci
-	vícekrát.
+	mockované funkce. Metoda setUp je tím nejlepším	místem, kde mít tyto mocky všechny pohromadě pro daný test case.
+	Metodu mockGlobalFunction můžete volat i vícekrát se stejným názvem funkce, TestIt si ohlídá, aby nedefinoval jednu funkci vícekrát.
 </p>
 <p>
 	Je potřeba si uvědomit, že jakmile je nějaká funkce definovaná v určitém jmenném prostoru, tak zůstane definovaná po celou dobu běhu testů. Proto
 	je potřeba do testů psát expecty na všechny její
 	volání. To je cena za možnost testovat i globální PHP funkce.
 </p>
+<p>
+	Problém nastává u funkcí, které používají výstupní parametr (například funkce preg_*). Nepodařilo se mi přijít na způsob, kterým by se dalo v testu jednoduše
+	definovat, co má funkce vrátit jako svojí návratovou hodnotu a co má vrátit v kterém výstupním parametru. Uvítám jakékoliv nápady na řešení.
+</p>
 <h2>
 	Přístup k chráněným atributům a metodám testované třídy
 </h2>
 <p>
 	Někteří to budou považovat za "prasárnu", ale při psaní unit testů se často hodí mít přístup k chráněným atributům a metodám testovaného objektu.
-	Jsou pro to v podstatě dva důvody. Někdy se stane, že vhodné pokrýt unit testem samostatnou metodu, která je ale označená jako protected.
-	Dále, před zavoláním testované metody je často potřeba uvést testovaný objekt do definovaného stavu. V takovém případě bychom mohli volat metody typu set* a podobně
-	(a někteří to tak také doporučují), mě osobně se ale tento způsob nelíbí. Je to z toho důvodu, že se tím do testu zanáší závislost na jiných metodách testovaného objektu.
-	Pokud potom rozbijeme takovou metodu, začnou nám selhávat i nesouvisející testy místo toho, aby spadnul právě jeden, který testuje tuto metodu. Ztěžuje to identifikaci problému.
-	V tomto případě ale velmi záleží na preferencích daného programátora, filozifií, jak se s tímto vypořádat, je několik.
-	<br>Samozřejmě se tyto metody mohou hodit i při testování převzatého kódu (což bývá kapitola sama pro sebe).
-</p>
-<p>
-	TestIt pro přístup k chráněným atributům a metodám testované třídy nabízí tyto metody:
+	Nechám na každém, jestli v testech někdy takové věci využívá nebo ne, v každém případě TestIt nabízí pro tyto případy několik pomocných metod:
 </p>
 <pre>
 protected function setPropertyInTestSubject($name, $value)
