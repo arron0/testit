@@ -15,13 +15,13 @@
 </p>
 <p>
 	Přiznám se, že jsem nikdy na psaní testů nepoužil jinou knihovnu než právě PHPUnit. Proč jsem nezkusil například Nette Test (ačkoliv jsem zavilý
-	Nettista)? Prostě jsem neměl tu potřebu a PHPUnit
-	vyhovoval všem mým požadavkům. Tedy skoro všem.
+	Nettista)? Prostě jsem neměl tu potřebu a PHPUnit vyhovoval všem mým požadavkům. Tedy skoro všem.
 </p>
 <p>
-	Ačkoliv má PHPUnit skvělé nástroje pro vytváření mocků, definice očekávaných volání (tzn. expectů) je krajně nepřehledná, zdlouhavá a nudná.
+	Ačkoliv má PHPUnit skvělé nástroje pro vytváření mocků, definice očekávaných volání (tzn. expectů; omlouvám se všem vlastencům, ale v dalším textu budu počešťovat tento anglický termín)
+	je krajně nepřehledná, zdlouhavá a nudná.
 	Nejdříve jsem chtěl použít nějaký jiný nástroj (třeba
-	Mokista), synax je ale u všech těchto nástrojů podobně zdlouhavá, že to z mého pohledu nemělo smysl.
+	Mockista), synax je ale u všech těchto nástrojů podobně zdlouhavá, že to z mého pohledu nemělo smysl.
 </p>
 <p>
 	Co se má v testu stát, když nenadefinuji žádný expect? Osobně mám za to, že když se stane něco, co neočekávám (čili jsem nenadefinoval žádné
@@ -48,6 +48,15 @@
 </h2>
 <p>
 	TestIt nainstalujte jednoduše přes Composer. Do svých závislostí přidejte arron/TestIt.
+<pre>
+{
+	"require": {
+		"arron/testit": "1.1.0",
+    },
+}
+
+</pre>
+<p>
 	Popřípadě si můžete stáhnout zdrojový kód na <a href="https://github.com/arron0/testit">GitHubu</a>.
 </p>
 <h2>
@@ -157,9 +166,14 @@ public function testSave()
 	kontroly za nás a v případě, že některé předpoklady nevyhovují, tak nás na to upozorní a test selže.
 </p>
 <p>
+	Pořadí volání expectDependencyCall zároveň určuje pořadí, ve kterém očekáváme, že budou závislosti volány. TestIt toto hlídá a pokud se zavolá jakákoliv závislost
+	mimo očekávané pořadí, test okamžitě selže. Toto chování je velmi důležité, protože pořádí volání závislostí může být kritické.
+	Například pokud bychom někam odesílali šifrovaná data, tak je velký rozdíl, pokud data nejdříve zašifrujeme a pak odešleme a nebo nejdříve odešleme
+	a pak teprve zašifrujeme. Unit test by v každém případě měl být schopný tyto dva případy rozlišit a případně spadnout.
+</p>
+<p>
 	Pokud bychom nechtěli kontrolovat předávané parametry (ať už z jakéhokoliv důvodu), stačí metodě expectDependencyCall() místo seznamu očekávaných
-	parametrů hodnotu null. Mock pak přijme jakékoliv
-	parametry jako správné.
+	parametrů předat hodnotu null. Test pak projde při zavolání závislosti s jakýmikoliv parametry.
 </p>
 <h2>
 	Testování vyjímek
@@ -348,6 +362,9 @@ protected function callTestSubjectMethod($name, array $arguments = array())
 	Knihovna TestIt je nadstavbou pro PHPUnit a umožňuje jednoduše mockovat třídy, globální PHP funkce a zkracuje zápis expectů. Umožňuje mockovat
 	stejné střídy pod jinými názvy závislostí. Je
 	restriktivní, co se neočekávaných volání závislostí týká, a ulehčuje testování selhání volání závislostí.
+</p>
+<p>
+	Kompletní příklady si můžete prohlédnout na <a href="https://github.com/arron0/testit/tree/master/examples">GitHubu</a>.
 </p>
 <p>
 	Knihovna je šířena pod licencí <a href="http://opensource.org/licenses/MIT">MIT</a>.
