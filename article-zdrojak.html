@@ -168,8 +168,7 @@ public function testSave()
 	Často se stane, že potřebujeme otestovat, co se stane, když nějaké volání závislosti vyhodí vyjímku. Například v metodě load v předchozím příkladu
 	modelu. TestIt si i s tímto případem dokáže
 	jednoduše poradit. Pokud metodě expectDependencyCall() předáme jako návratovou hodnotu instanci třídy \Exception (či jakéhokoliv jejího potomka),
-	potom danou instanci nevrátí, ale tuto instanci
-	vyhodí jako vyjímku. V testu to vypadá takto:
+	potom zavolání příslužné závislosti danou instanci nevrátí, ale tuto instanci vyhodí jako vyjímku. V testu to vypadá takto:
 </p>
 <pre>
 public function testLoadNotFound()
@@ -177,7 +176,7 @@ public function testLoadNotFound()
 	$id = 'idForTest';
 	$expectedResult = 'There is no content yet.';
 
-	$this->expectDependencyCall('storage', 'load', array($id), new ContentNotFoundException());
+	$this->expectDependencyCall('storage', 'load', array($id), new ContentNotFoundException()); //volání $this->storage->load($id) v metodě load() vyhodí vyjímku
 
 	$returnedResult = $this->getTestObject()->load($id);
 
@@ -199,8 +198,14 @@ public function testLoadNotFound()
 	zavoláme v některém nedefinovanou funkci tak ta
 	nakonec „probublá“ až do globálního prostoru a zavolá se globální PHP funkce. Pokud ale v nějakém jmenném prostoru funkci nadefinujeme, tak se
 	zavolá ona nadefinovaná (nikoliv globální PHP
-	funkce). Vyplývá z toho jedno zásadní omezení této funkce. Funkce volané s plným názvem jmenného prostoru nepůjdou namockovat:
+	funkce). Vyplývá z toho jedno zásadní omezení tohoto řešení. Funkce volané s plným názvem jmenného prostoru nepůjdou namockovat:
 </p>
+<pre>
+namespace SomeNamespace;
+	$timestamp = time();//funkce time může být namockována
+
+	$timestamp = \time();//funkce time NEmůže být namockována
+</pre>
 <p>
 	V praxi to funguje takto. Mějme třídu, která je fyzickým úložištěm pro předchozí příklad a data ukládá do souborů:
 </p>
@@ -320,12 +325,12 @@ class ContentFileStorageTest extends \Arron\TestIt\TestCase
 	Přístup k chráněným atributům a metodám testované třídy
 </h2>
 <p>
-	Někteří to budou považovat za "prasárnu", ale při psaní unit testůse často hodí mít přístup ke chráněným atributům a metodám testovaného objektu.
+	Někteří to budou považovat za "prasárnu", ale při psaní unit testů se často hodí mít přístup k chráněným atributům a metodám testovaného objektu.
 	Jsou pro to v podstatě dva důvody. Někdy se stane, že vhodné pokrýt unit testem samostatnou metodu, která je ale označená jako protected.
-	Dále, před zavoláním testované metody je často uvést testovaný objekt do definovaného stavu. V takovém případě bychom mohli volat metody typu set* a podobně
-	(a někteří to tak také doporučují), mě osobně se tento způsob ale nelíbí. Je to z toho důvodu, že se tím do testu zanáší závislost na jiných metodách testovaného objektu.
+	Dále, před zavoláním testované metody je často potřeba uvést testovaný objekt do definovaného stavu. V takovém případě bychom mohli volat metody typu set* a podobně
+	(a někteří to tak také doporučují), mě osobně se ale tento způsob nelíbí. Je to z toho důvodu, že se tím do testu zanáší závislost na jiných metodách testovaného objektu.
 	Pokud potom rozbijeme takovou metodu, začnou nám selhávat i nesouvisející testy místo toho, aby spadnul právě jeden, který testuje tuto metodu. Ztěžuje to identifikaci problému.
-	V tomto případě ale velmi záleží na preferencích daného programátora, filozifií, jak se s tímto vypořádat je několik.
+	V tomto případě ale velmi záleží na preferencích daného programátora, filozifií, jak se s tímto vypořádat, je několik.
 	<br>Samozřejmě se tyto metody mohou hodit i při testování převzatého kódu (což bývá kapitola sama pro sebe).
 </p>
 <p>
@@ -333,7 +338,7 @@ class ContentFileStorageTest extends \Arron\TestIt\TestCase
 </p>
 <pre>
 protected function setPropertyInTestSubject($name, $value)
-protected function getPropertyFromTestSubject($name) //dobře se používá na asserty
+protected function getPropertyFromTestSubject($name) //dobře se používá na asserty abychom zjistili, zda se objekt po volání testované metody nachází v očekávaném stavu
 protected function callTestSubjectMethod($name, array $arguments = array())
 </pre>
 <h2>
