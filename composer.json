@@ -16,6 +16,7 @@
 	"autoload": {
 		"classmap": ["TestIt/"]
 	},
+	"bin": ["TestIt/bin/debugphpscript"],
 	"authors": [
 		{
 			"name": "Tomáš Lembacher",
