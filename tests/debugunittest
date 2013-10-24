@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./../TestIt/bin/debugphpscript -id PhpStorm -s arron-server.local -ip 192.168.64.100 -c "./../vendor/bin/phpunit --configuration ./testsConfig.xml $@"
+
+exit 0

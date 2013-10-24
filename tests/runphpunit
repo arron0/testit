@@ -1,0 +1,4 @@
+#!/bin/bash
+php ./../vendor/bin/phpunit --configuration ./testsConfig.xml $@
+
+exit 0
