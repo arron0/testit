@@ -201,6 +201,7 @@ class MockFactory
 
 	public function createMockOfGlobalFunctionInNamespace($name, $namespace)
 	{
+		$namespace = trim($namespace, '\\');
 		$namespacedIdentificator = $namespace . '\\' . $name;
 		if ($this->isGlobalFunctionMocked($namespacedIdentificator)) {
 			return;
