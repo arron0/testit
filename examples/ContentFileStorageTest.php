@@ -2,20 +2,24 @@
 /**
  * Requires PHP Version 5.3 (min)
  *
- * @package
- * @subpackage
+ * @package Arron
+ * @subpackage Examples
+ * @subpackage Tests
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-namespace Arron\Examples;
+namespace Arron\Examples\Tests;
+
+use Arron\Examples\ContentFileStorage;
 
 require_once 'IContentStorage.php';
 require_once 'ContentFileStorage.php';
 /**
  * ContentFileStorageTest class definition
  *
- * @package
- * @subpackage
+ * @package Arron
+ * @subpackage Examples
+ * @subpackage Tests
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
@@ -25,13 +29,13 @@ class ContentFileStorageTest extends \Arron\TestIt\TestCase
 	protected function setUp()
 	{
 		//global functions are mocked before parent setUp call, because they are used during test object creation
-		$this->mockGlobalFunction('is_dir');
-		$this->mockGlobalFunction('umask');
-		$this->mockGlobalFunction('mkdir');
-		$this->mockGlobalFunction('file_put_contents');
-		$this->mockGlobalFunction('file_exists');
-		$this->mockGlobalFunction('file_get_contents');
-		$this->mockGlobalFunction('unlink');
+		$this->mockGlobalFunction('is_dir', 'Arron\Examples');
+		$this->mockGlobalFunction('umask', 'Arron\Examples');
+		$this->mockGlobalFunction('mkdir', 'Arron\Examples');
+		$this->mockGlobalFunction('file_put_contents', 'Arron\Examples');
+		$this->mockGlobalFunction('file_exists', 'Arron\Examples');
+		$this->mockGlobalFunction('file_get_contents', 'Arron\Examples');
+		$this->mockGlobalFunction('unlink', 'Arron\Examples');
 		parent::setUp();
 	}
 

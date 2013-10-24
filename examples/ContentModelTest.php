@@ -4,10 +4,13 @@
  *
  * @package Arron
  * @subpackage Examples
+ * @subpackage Tests
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license http://opensource.org/licenses/MIT MIT
  */
-namespace Arron\Examples;
+namespace Arron\Examples\Tests;
+
+use Arron\Examples\ContentModel;
 
 require_once 'IContentStorage.php';
 require_once 'ContentModel.php';
@@ -16,6 +19,7 @@ require_once 'ContentModel.php';
  *
  * @package Arron
  * @subpackage Examples
+ * @subpackage Tests
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license http://opensource.org/licenses/MIT MIT
  */
@@ -71,5 +75,24 @@ class ContentModelTest extends \Arron\TestIt\TestCase
 		$this->expectDependencyCall('storage', 'delete', array($id));
 
 		$this->getTestObject()->delete($id);
+	}
+
+	public function testPhpUnitMockNoExpectationSetPass()
+	{
+		$storageMock = $this->getMock('\Arron\Examples\IContentStorage');
+		$testObject = new ContentModel($storageMock);
+
+		$returnedResult = $testObject->load('testID');
+	}
+
+	public function testPhpUnitMock()
+	{
+		$storageMock = $this->getMock('\Arron\Examples\IContentStorage');
+		$testObject = new ContentModel($storageMock);
+
+		$storageMock->expects($this->at(0))->method('load');
+		$storageMock->expects($this->at(1))->method('load');
+
+		$returnedResult = $testObject->load('testID');
 	}
 }
