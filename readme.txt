@@ -56,7 +56,7 @@ Mock-creation engine uses native PHPUnit mocking, automatically mocking all publ
 All you have to do is to pass the mock to your class you are testing to be called from there.
 
 Creating mocks of global functions
----------------------------------
+----------------------------------
 
 TestIt allows you to mock global functions. Do it by calling mockGlobalFunction function.
 
@@ -64,7 +64,7 @@ TestIt allows you to mock global functions. Do it by calling mockGlobalFunction 
 protected function mockGlobalFunction($name, $namespace = NULL)
 
 //just call it before using global function
-$this->mockGlobalFunction('time', '\YourNamespace');
+$this->mockGlobalFunction('time', 'YourNamespace');
 //and then expect the call
 $this->expectDependencyCall('global', 'time', array(), 123456789);
 \---
@@ -162,4 +162,15 @@ TestIt will automatically assert your expectations. For every dependency call th
 - correct method on correct dependency is called in correct order (defined by order of expectations)
 - actual arguments of the method called are asserted against expected ones. If there is any of the methods arguments optional (with default value) and it is omitted, default value will be filled to the expectation.
 If any of this assertion fails the test will fail immediately. Meaningful error message is generated, so it is clear what should have happened and what actually happened.
+
+Remote debugging of PHP cli scripts
+===================================
+
+From version 1.2.0 TestIt comes with bash script, that will allowes you to debug PHP cli scripts, running on server, on your local mashine. You can find **debugphpscript** in your vendor/bin directory.
+All you have to do is configure your IDE to be able of remote debugging with xDebug (consult help for your IDE), set your IDE for listening for incoming xDebug session and than launch your
+cli script you want to debug through **debugphpscript**. You have to specify session_id of xDebug session, in some cases (ex. PhpStorm) you have to specify name of you server
+configuration in IDE, IP address of your local mashine is needed and of course, you have to specify what command you want to run.
+/---code
+./debugphpscript -id PhpStorm -s myserver.local -ip 192.168.1.1 -c "my_script.php -f someConfiguration"
+\---
 
