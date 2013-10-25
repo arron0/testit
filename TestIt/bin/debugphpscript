@@ -11,10 +11,9 @@ set_filled_option() {
 }
 
 check_all_flags_set() {
-	if [ ! "$filled_options" -eq 15 ]; then
+	if [ "$filled_options" -lt 13 ]; then
 		echo "All flags has to be set."
 		check_missing_flag 0x01 "-id"
-		check_missing_flag 0x02 "-s"
 		check_missing_flag 0x04 "-ip"
 		check_missing_flag 0x08 "-c"
 		echo ""
@@ -31,15 +30,16 @@ check_missing_flag() {
 }
 
 print_usage() {
-	echo "Usage: ${HILITE}${0##*/}${NORMAL} -id IDE_IDKEY -s IDE_CONFIG -ip REMOTE_HOST_IP -c COMMAND_TO_EXECUTE"
+	echo "Usage: ${HILITE}${0##*/}${NORMAL} -id IDE_IDKEY [-s IDE_CONFIG] -ip REMOTE_HOST_IP -c COMMAND_TO_EXECUTE"
 	echo " Run PHP command with connect to remote debugger."
 	echo ""
 	echo "${HILITE}Mandatory flags:${NORMAL}"
-	echo "	${GOOD}-id${NORMAL} IDE name (xDEBUG session_id)"
-	echo "	${GOOD}-s${NORMAL}  IDE server configuration name (PHP_IDE_CONFIG=\"serverName=IDE_CONFIG\""
+	echo "	${GOOD}-id${NORMAL} xDEBUG session_id"
 	echo "	${GOOD}-ip${NORMAL} IP address of the remote debugger."
 	echo "	${GOOD}-c${NORMAL}  PHP command to run (without php command itself)."
 	echo ""
+	echo "${HILITE}Other flags:${NORMAL}"
+	echo "	${GOOD}-s${NORMAL}  IDE server configuration name (PHP_IDE_CONFIG=\"serverName=IDE_CONFIG\""
 }
 
 if [ "$#" == "0" ]; then
@@ -79,6 +79,11 @@ done
 
 check_all_flags_set
 
-XDEBUG_CONFIG="idekey=${id}" PHP_IDE_CONFIG="serverName=${config_name}" php -dxdebug.remote_connect_back=0 -dxdebug.remote_host=${ip_address} ${command}
+ide_config=""
+if [ ! "$config_name" == "" ]; then
+	ide_config="PHP_IDE_CONFIG=\"serverName=${config_name}\""
+fi
+
+eval XDEBUG_CONFIG="idekey=${id}" ${ide_config} php -dxdebug.remote_connect_back=0 -dxdebug.remote_host=${ip_address} ${command}
 
 exit 0
