@@ -32,7 +32,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 	 */
 	protected function onNotSuccessfulTest(\Exception $e)
 	{
-		if(($this->getName() != "testExpectingMoreCallsThanCalled") && ($e->getMessage() != "'dependency2::doSomething' expected to be called but wasn't/weren't.")) {
+		if (($this->getName() != "testExpectingMoreCallsThanCalled") && ($e->getMessage() != "'dependency2::doSomething' expected to be called but wasn't/weren't.")) {
 			throw $e;
 		}
 	}
@@ -225,8 +225,4 @@ class TestItTest extends \Arron\TestIt\TestCase
 	{
 		$this->setterTest('setProtectedProperty', 142);
 	}
-
-
-
-
 }
