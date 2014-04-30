@@ -9,6 +9,8 @@
  */
 namespace Arron\TestIt\Tools;
 
+use PHPUnit_Framework_MockObject_Generator;
+
 /**
  * MockFactory class definition
  *
@@ -36,6 +38,11 @@ class MockFactory
 	private $methodsParameters = array();
 
 	/**
+	 * @var MockGenerator
+	 */
+	private $mockObjectGenerator;
+
+	/**
 	 * Protected constructor (class is a singleton)
 	 */
 	protected function __construct()
@@ -51,6 +58,17 @@ class MockFactory
 			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * @return MockGenerator
+	 */
+	protected function getMockGenerator()
+	{
+		if(is_null($this->mockObjectGenerator)) {
+			$this->mockObjectGenerator = new MockGenerator();
+		}
+		return $this->mockObjectGenerator;
 	}
 
 	/**
@@ -160,7 +178,7 @@ class MockFactory
 	protected function mockClass($mockName, $className)
 	{
 		$reflection = new \ReflectionClass($className);
-		$mock = \PHPUnit_Framework_MockObject_Generator::getMock($className, array(), array(), $mockName, FALSE, FALSE, TRUE, FALSE);
+		$mock =$this->getMockGenerator()->getMock($className, array(), array(), $mockName, FALSE, FALSE, TRUE, FALSE);
 
 		$publicMethods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
@@ -217,8 +235,8 @@ class MockFactory
 
 	protected function generateCodeForGlobalFunctionMock($name, $namespace, $reflectionObject)
 	{
-		$arguments = \PHPUnit_Util_Class::getMethodParameters($reflectionObject);
-		$argumentsVariables = \PHPUnit_Util_Class::getMethodParameters($reflectionObject, TRUE);
+		$arguments = $this->getMockGenerator()->getMethodParameters($reflectionObject);
+		$argumentsVariables = $this->getMockGenerator()->getMethodParameters($reflectionObject, TRUE);
 
 		return "namespace $namespace; function $name($arguments){return \\Arron\\TestIt\\Tools\\FunctionsCallLogger::processFunctionCall('global::' . '$name', array($argumentsVariables));}";
 	}
