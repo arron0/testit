@@ -41,20 +41,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @inheritdoc
-	 * @throws \ErrorException
-	 */
-	protected function checkRequirements()
-	{
-		parent::checkRequirements();
-		if (!$this->setupCheck) {
-			$reflection = new \ReflectionClass($this);
-			$class = $reflection->getMethod('setUp')->getDeclaringClass()->getName();
-			throw new \ErrorException("Method $class::setUp() or its descendant doesn't call parent::setUp().");
-		}
-	}
-
-	/**
 	 * @return object
 	 */
 	abstract protected function createTestObject();
