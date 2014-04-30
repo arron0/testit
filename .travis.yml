@@ -6,4 +6,5 @@ php:
   - hhvm
 install:
    - composer install
+   - chmod 777 ./tests/runUnitTests
 script: ./tests/runUnitTests
