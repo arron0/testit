@@ -2,4 +2,4 @@
 clear
 ./runphpunit unitTests
 
-exit 0
+exit $?
