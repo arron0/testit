@@ -28,17 +28,17 @@ class MockGenerator extends \PHPUnit_Framework_MockObject_Generator
 	/**
 	 * Returns the parameters of a function or method.
 	 *
-	 * @param  ReflectionFunction|ReflectionMethod $method
+	 * @param  ReflectionFunction $function
 	 * @param  boolean $forCall
 	 *
 	 * @return string
 	 * @since  Method available since Release 2.0
 	 */
-	public function getMethodParameters($method, $forCall = FALSE)
+	public function getFunctionParameters(ReflectionFunction $function, $forCall = FALSE)
 	{
 		$parameters = array();
 
-		foreach ($method->getParameters() as $i => $parameter) {
+		foreach ($function->getParameters() as $i => $parameter) {
 			$name = '$' . $parameter->getName();
 
 			/* Note: PHP extensions may use empty names for reference arguments
@@ -67,8 +67,8 @@ class MockGenerator extends \PHPUnit_Framework_MockObject_Generator
 								sprintf(
 										'Cannot mock %s::%s() because a class or ' .
 										'interface used in the signature is not loaded',
-										$method instanceof ReflectionMethod ? $method->getDeclaringClass()->getName() : 'global',
-										$method->getName()
+										'global',
+										$function->getName()
 								),
 								0,
 								$e

@@ -36,7 +36,7 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 	public function testGetMethodParametersWithFunctions($functionName, $expectedResult)
 	{
 		$reflectionFunction = new \ReflectionFunction($functionName);
-		$returnedResult = $this->getTestObject()->getMethodParameters($reflectionFunction);
+		$returnedResult = $this->getTestObject()->getFunctionParameters($reflectionFunction);
 		$this->assertEquals($expectedResult, $returnedResult);
 	}
 
@@ -48,23 +48,6 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 				array('array_keys', '$arg, $search_value = null, $strict = null'),
 				array('next', '&$arg'),
 				array('array_map', '$callback, $arg, $arg2 = null'),
-		);
-	}
-
-	/**
-	 * @dataProvider getMethodParametersWithMethodsDataProvider
-	 */
-	public function testGetMethodParametersWithMethods($class, $method, $expectedResult)
-	{
-		$reflectionMethod = new \ReflectionMethod($class, $method);
-		$returnedResult = $this->getTestObject()->getMethodParameters($reflectionMethod);
-		$this->assertEquals($expectedResult, $returnedResult);
-	}
-
-	public function getMethodParametersWithMethodsDataProvider()
-	{
-		return array(
-				array('DateTime', 'add', '$interval'),
 		);
 	}
 }

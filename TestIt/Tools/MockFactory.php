@@ -235,8 +235,8 @@ class MockFactory
 
 	protected function generateCodeForGlobalFunctionMock($name, $namespace, $reflectionObject)
 	{
-		$arguments = $this->getMockGenerator()->getMethodParameters($reflectionObject);
-		$argumentsVariables = $this->getMockGenerator()->getMethodParameters($reflectionObject, TRUE);
+		$arguments = $this->getMockGenerator()->getFunctionParameters($reflectionObject);
+		$argumentsVariables = $this->getMockGenerator()->getFunctionParameters($reflectionObject, TRUE);
 
 		return "namespace $namespace; function $name($arguments){return \\Arron\\TestIt\\Tools\\FunctionsCallLogger::processFunctionCall('global::' . '$name', array($argumentsVariables));}";
 	}
