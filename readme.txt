@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/arron0/testit.svg?branch=master)](https://travis-ci.org/arron0/testit)
+
 TestIt Library
 ##############
 
