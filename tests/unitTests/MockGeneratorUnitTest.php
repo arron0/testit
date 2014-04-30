@@ -35,6 +35,9 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 	 */
 	public function testGetMethodParametersWithFunctions($functionName, $expectedResult)
 	{
+		if(defined('HHVM_VERSION')) {
+			$this->markTestSkipped('Not testing this in HHVM because of different implementation than in PHP.');
+		}
 		$reflectionFunction = new \ReflectionFunction($functionName);
 		$returnedResult = $this->getTestObject()->getFunctionParameters($reflectionFunction);
 		$this->assertEquals($expectedResult, $returnedResult);
