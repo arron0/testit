@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model xlink:href="/usr/share/php5/PEAR/data/phing/etc/phing-grammar.rng"
+		type="application/xml"
+		schematypens="http://relaxng.org/ns/structure/1.0" ?>
+
+<project name="TestIt" default="build" basedir=".">
+	<property name="baseDir" value="${project.basedir}" />
+	<property name="buildDir" value="${baseDir}/build" />
+	<property name="logDir" value="${buildDir}/logs" />
+	<property name="coverageDir" value="${buildDir}/coverage" />
+	<property name="binDir" value="${baseDir}/vendor/bin" />
+	<property name="sourceDir" value="${baseDir}/TestIt" />
+
+	<target name="prepare">
+		<echo msg="Creating directories for build:"/>
+		<mkdir dir="${logDir}" mode="777"/>
+		<mkdir dir="${coverageDir}" mode="777"/>
+		<mkdir dir="${buildDir}/pdepend" mode="777"/>
+	</target>
+
+	<target name="phploc" depends="prepare" description="Measure project size using PHPLOC">
+		<exec executable="${binDir}/phploc">
+			<arg value="--count-tests"/>
+			<arg value="--log-csv"/>
+			<arg value="${logDir}/phploc.csv"/>
+			<arg path="${sourceDir}"/>
+		</exec>
+	</target>
+
+	<target name="phpmd" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+		<exec executable="${binDir}/phpmd">
+			<arg path="${sourceDir}"/>
+			<arg value="text"/>
+			<arg value="${baseDir}/phpmd.xml"/>
+		</exec>
+	</target>
+
+	<target name="phpmd-ci" depends="prepare" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+		<exec executable="${binDir}/phpmd">
+			<arg path="${sourceDir}"/>
+			<arg value="xml"/>
+			<arg value="${baseDir}/phpmd.xml"/>
+			<arg value="--reportfile"/>
+			<arg value="${logDir}/pmd.xml"/>
+		</exec>
+	</target>
+
+	<target name="pdepend" depends="prepare" description="Calculate software metrics using PHP_Depend">
+		<exec executable="${binDir}/pdepend">
+			<arg value="--jdepend-xml=${logDir}/jdepend.xml"/>
+			<arg value="--jdepend-chart=${buildDir}/pdepend/dependencies.svg"/>
+			<arg value="--overview-pyramid=${buildDir}/pdepend/overview-pyramid.svg"/>
+			<arg path="${sourceDir}"/>
+		</exec>
+	</target>
+
+	<target name="phpcpd" description="Find duplicate code using PHPCPD">
+		<exec executable="${binDir}/phpcpd">
+			<arg value="--log-pmd" />
+			<arg value="${logDir}/pmd-cpd.xml" />
+			<arg path="${sourceDir}" />
+		</exec>
+	</target>
+
+	<target name="unittests" depends="prepare">
+		<echo msg="Running PHPUnit:"/>
+		<exec executable="${binDir}/phpunit">
+			<arg line="-c ${project.basedir}/tests/jenkinsConfig.xml"/>
+			<arg line="--coverage-html ${coverageDir}"/>
+			<arg line="--coverage-clover ${logDir}/clover.xml"/>
+			<arg line="--coverage-crap4j ${logDir}/crap4j.xml"/>
+			<arg line="--log-junit ${logDir}/junit.xml"/>
+			<arg line="${project.basedir}/tests/unitTests"/>
+		</exec>
+	</target>
+
+	<target name="build" depends="phploc, phpmd-ci, pdepend, phpcpd, unittests">
+		<echo msg="Build!"/>
+	</target>
+</project>

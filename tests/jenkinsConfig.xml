@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : testsConfig.xml
+    Author     : Tomáš Lembacher <tomas.lembacher@seznam.cz>
+    Description:
+        Configuration file for running phpUnit tests with all the features
+-->
+<phpunit
+		bootstrap="bootstrap.php"
+		colors="true"
+		strict="false"
+		verbose="true"
+		>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">../TestIt</directory>
+		</whitelist>
+	</filter>
+</phpunit>

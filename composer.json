@@ -13,6 +13,13 @@
 		"php": ">=5.3.3",
 		"phpunit/phpunit": "4.*"
 	},
+	"require-dev": {
+		"phing/phing": "*",
+		"pdepend/pdepend": "*",
+		"phploc/phploc": "*",
+		"phpmd/phpmd" : "*",
+		"sebastian/phpcpd": "*"
+	},
 	"autoload": {
 		"classmap": ["TestIt/"]
 	},
