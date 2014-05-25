@@ -10,12 +10,14 @@
 	<property name="coverageDir" value="${buildDir}/coverage" />
 	<property name="binDir" value="${baseDir}/vendor/bin" />
 	<property name="sourceDir" value="${baseDir}/TestIt" />
+	<property name="assetsDir" value="${buildDir}/assets" />
 
 	<target name="prepare">
 		<echo msg="Creating directories for build:"/>
 		<mkdir dir="${logDir}" mode="777"/>
 		<mkdir dir="${coverageDir}" mode="777"/>
 		<mkdir dir="${buildDir}/pdepend" mode="777"/>
+		<mkdir dir="${assetsDir}" mode="777"/>
 	</target>
 
 	<target name="phploc" depends="prepare" description="Measure project size using PHPLOC">
@@ -65,12 +67,29 @@
 	<target name="unittests" depends="prepare">
 		<echo msg="Running PHPUnit:"/>
 		<exec executable="${binDir}/phpunit">
-			<arg line="-c ${project.basedir}/tests/jenkinsConfig.xml"/>
+			<arg line="-c ${baseDir}/tests/jenkinsConfig.xml"/>
 			<arg line="--coverage-html ${coverageDir}"/>
 			<arg line="--coverage-clover ${logDir}/clover.xml"/>
 			<arg line="--coverage-crap4j ${logDir}/crap4j.xml"/>
 			<arg line="--log-junit ${logDir}/junit.xml"/>
-			<arg line="${project.basedir}/tests/unitTests"/>
+			<arg line="${baseDir}/tests/unitTests"/>
+		</exec>
+	</target>
+
+	<target name="doc" depends="prepare">
+		<echo msg="Generating documentation:"/>
+		<exec executable="${binDir}/convert">
+			<arg line="texy" />
+			<arg line="${baseDir}/doc/readme.texy" />
+			<arg line="${assetsDir}/index.html" />
+			<arg line="-t ${baseDir}/doc/template.latte" />
+			<arg line="-f" />
+		</exec>
+		<exec executable="${binDir}/convert">
+			<arg line="texy" />
+			<arg line="${baseDir}/doc/readme.texy" />
+			<arg line="${baseDir}/readme.md" />
+			<arg line="-f" />
 		</exec>
 	</target>
 
