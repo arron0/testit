@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9febec7a4c1757da7b48b40bfd065f63",
+    "hash": "09631a5ce1bc218be966c528d2e98f61",
     "packages": [
         {
             "name": "phpunit/php-code-coverage",
@@ -633,6 +633,154 @@
     ],
     "packages-dev": [
         {
+            "name": "arron/cli-texy-converter",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/arron0/cli-texy-converter.git",
+                "reference": "4fe5a2468bd4adafa88bc758524399eeb0eb1766"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/arron0/cli-texy-converter/zipball/4fe5a2468bd4adafa88bc758524399eeb0eb1766",
+                "reference": "4fe5a2468bd4adafa88bc758524399eeb0eb1766",
+                "shasum": ""
+            },
+            "require": {
+                "kukulich/fshl": "2.*",
+                "latte/latte": "2.*",
+                "php": ">=5.3.3",
+                "symfony/console": "2.*",
+                "texy/texy": "<=2.5"
+            },
+            "require-dev": {
+                "arron/testit": "*"
+            },
+            "bin": [
+                "convert"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Converter/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL (optional either v2 or any later version)"
+            ],
+            "authors": [
+                {
+                    "name": "Tomáš Lembacher",
+                    "email": "tomas.lembacher@gmail.com"
+                }
+            ],
+            "description": "For converting Texy files to HTML or GitHub Markdown via command line.",
+            "time": "2014-05-24 00:27:04"
+        },
+        {
+            "name": "kukulich/fshl",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kukulich/fshl.git",
+                "reference": "974c294ade5d76c0c16b6fe3fd3a584ba999b24f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kukulich/fshl/zipball/974c294ade5d76c0c16b6fe3fd3a584ba999b24f",
+                "reference": "974c294ade5d76c0c16b6fe3fd3a584ba999b24f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "FSHL": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Jaroslav Hanslík",
+                    "homepage": "https://github.com/kukulich"
+                }
+            ],
+            "description": "FSHL is a free, open source, universal, fast syntax highlighter written in PHP.",
+            "homepage": "http://fshl.kukulich.cz/",
+            "keywords": [
+                "highlight",
+                "library",
+                "syntax"
+            ],
+            "time": "2012-09-08 19:00:07"
+        },
+        {
+            "name": "latte/latte",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/latte.git",
+                "reference": "83386095ebd63ef92a5f8545af72080897c46284"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/latte/zipball/83386095ebd63ef92a5f8545af72080897c46284",
+                "reference": "83386095ebd63ef92a5f8545af72080897c46284",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "nette/tester": "~1.0"
+            },
+            "suggest": {
+                "ext-fileinfo": "to use filter |datastream",
+                "ext-mbstring": "to use filters like lower, upper, capitalize, ..."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "http://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "http://nette.org/contributors"
+                }
+            ],
+            "description": "Latte: the amazing template engine for PHP",
+            "homepage": "http://latte.nette.org",
+            "keywords": [
+                "templating",
+                "twig"
+            ],
+            "time": "2014-05-22 22:25:43"
+        },
+        {
             "name": "pdepend/pdepend",
             "version": "1.1.3",
             "source": {
@@ -1038,6 +1186,62 @@
             "time": "2014-04-27 13:34:57"
         },
         {
+            "name": "texy/texy",
+            "version": "v2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dg/texy.git",
+                "reference": "0d5fe6c51ff28e6705d42a380184bd3d58c0bdab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dg/texy/zipball/0d5fe6c51ff28e6705d42a380184bd3d58c0bdab",
+                "reference": "0d5fe6c51ff28e6705d42a380184bd3d58c0bdab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "replace": {
+                "dg/texy": "self.version"
+            },
+            "require-dev": {
+                "nette/tester": "~1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/texy.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "http://davidgrudl.com"
+                }
+            ],
+            "description": "Texy converts plain text in easy to read Texy syntax into structurally valid (X)HTML. It supports adding of images, links, nested lists, tables and has full support for CSS. Texy supports hyphenation of long words (which reflects language rules), clickable emails and URL (emails are obfuscated against spambots), national typographic single and double quotation marks, ellipses, em dashes, dimension sign, nonbreakable spaces (e.g. in phone numbers), acronyms, arrows and many others. Texy code can optionally contain HTML tags.",
+            "homepage": "http://texy.info",
+            "keywords": [
+                "html",
+                "markdown",
+                "markup language",
+                "plain text",
+                "text",
+                "textile",
+                "texy",
+                "wiki",
+                "xhtml"
+            ],
+            "time": "2014-05-12 15:28:49"
+        },
+        {
             "name": "theseer/fdomdocument",
             "version": "1.5.0",
             "source": {
@@ -1081,7 +1285,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [
 
     ],
