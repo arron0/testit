@@ -2,12 +2,12 @@
 <html>
 
 <head>
-	<meta charset='utf-8'/>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-	<meta name="description" content="Testit : "/>
+	<meta charset='utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<meta name="description" content="Testit : ">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/texy.css"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/texy.css">
 
 	<title>Testit</title>
 </head>
@@ -33,47 +33,45 @@
 <!-- MAIN CONTENT -->
 <div id="main_content_wrap" class="outer">
 <section id="main_content" class="inner">
-
-
-
-<h1 id="toc-testit-library">TestIt Library</h1>
+    
+<h1>TestIt Library</h1>
 
 <p>TestIt is an add-on library for PHPUnit that extends mocking engine and
-	allows comfort testing of class interactions with surrounding environment. Are
-	you tired using
-	$this-&gt;getMock()-&gt;expects()-&gt;method()-&gt;with()-&gt;will()
-	constructions? TestIt is for you :-)</p>
+allows comfort testing of class interactions with surrounding environment. Are
+you tired using
+$this-&gt;getMock()-&gt;expects()-&gt;method()-&gt;with()-&gt;will()
+constructions? TestIt is for you :-)</p>
 
 <p>Usual unit test consists from several steps:</p>
 
 <ul>
-	<li><strong>data preparation</strong> – prepare all data you'll need during
-		the test. Input data, partial results (to return from mocked dependencies),
-		expected results etc.</li>
+	<li><strong>data preparation</strong> – prepare all data you'll need during
+	the test. Input data, partial results (to return from mocked dependencies),
+	expected results etc.</li>
 
-	<li><strong>mocking of dependencies</strong> – creating of „fake“
-		dependencies to not interact with the real environment during the test</li>
+	<li><strong>mocking of dependencies</strong> – creating of „fake“
+	dependencies to not interact with the real environment during the test</li>
 
-	<li><strong>creating new instance of the object to test</strong> – for every
-		test new (clean) instance is necessary</li>
+	<li><strong>creating new instance of the object to test</strong> – for every
+	test new (clean) instance is necessary</li>
 
-	<li><strong>expecting what should happen</strong> – defining expectations of
-		dependencies calls and its behaviour (returning specific value, throwing
-		exception etc.)</li>
+	<li><strong>expecting what should happen</strong> – defining expectations of
+	dependencies calls and its behaviour (returning specific value, throwing
+	exception etc.)</li>
 
-	<li><strong>putting instance of tested object to the defined state</strong> –
-		starting conditions are important for the test in order to be deterministic</li>
+	<li><strong>putting instance of tested object to the defined state</strong> –
+	starting conditions are important for the test in order to be deterministic</li>
 
 	<li><strong>calling method (methods) on testing instance</strong></li>
 
-	<li><strong>asserting end conditions</strong> – asserting that all
-		expectations are met, all results are as expected and test instance is in
-		expected end state</li>
+	<li><strong>asserting end conditions</strong> – asserting that all
+	expectations are met, all results are as expected and test instance is in
+	expected end state</li>
 </ul>
 
 <p>TestIt can help you with most of the steps.</p>
 
-<h2 id="toc-compatibility">Compatibility</h2>
+<h2>Compatibility</h2>
 
 <ul>
 	<li>Version 1.* is compatible with PHPUnit 3.7.*</li>
@@ -81,270 +79,210 @@
 	<li>Version 2.* is compatible with PHPUnit 4.*</li>
 </ul>
 
-<p>We are running our unit tests against PHP versions 5.3, 5.4 and 5.5 and
-	against HHVM.</p>
+<p>We are running our unit tests against PHP versions 5.3, 5.4 and 5.5 and
+against HHVM.</p>
 
 <p>Please report any bugs into GitHub. Thank you.</p>
 
-<h2 id="toc-installation">Installation</h2>
+<h2>Installation</h2>
 
 <p>Use <a href="http://getcomposer.org">composer</a> to install TestIt. Just add
-	<strong>arron/testit</strong> project as your dependency.</p>
+<strong>arron/testit</strong> project as your dependency.</p>
 
-<h2 id="toc-testing-with-testit">Testing with TestIt</h2>
+<h2>Testing with TestIt</h2>
 
 <p>TestIt offers own TestCase class that is inherited from
-	\PHPUnit_Frame­work_TestCase and enhancing it with some features. It is meant
-	to be base class for your tests. It is helping you with creating mocks of your
-	class dependencies and verifying those dependencies are called as expected. To
-	use this features, just inherit your test base class from
-	\Arron\TestIt\Tes­tCase class and you are free to go.</p>
+\PHPUnit_Frame­work_TestCase and enhancing it with some features. It is meant
+to be base class for your tests. It is helping you with creating mocks of your
+class dependencies and verifying those dependencies are called as expected. To
+use this features, just inherit your test base class from
+\Arron\TestIt\Tes­tCase class and you are free to go.</p>
 
 <p>The best way how to profit from this library is to integrate it to your tests
-	so you will be able to use all those features even more easily.</p>
+so you will be able to use all those features even more easily.</p>
 
 <p><strong>For examples, check examples directory.</strong></p>
 
-<h3 id="toc-creating-of-the-object-to-test">Creating of the object to test</h3>
+<h3>Creating of the object to test</h3>
 
 <p>There is abstract method createTestObject() defined in
-	\Arron\TestIt\Tes­tCase namespace. It should return created instance ready to
-	use for testing. So createTestObject() is the right place for any initialization
-	mock injections etc. It will be called during the setUp call. So just
-	concentrate on new object creation, the rest is in hands of TestIt :-) If you
-	need to call any expectations about any dependencies called in the time of test
-	object creation, overwrite <strong>initializatio­nExpectations</strong> method
-	and place your expectations there. This method will be called just before object
-	creation in the setUp method.</p>
+\Arron\TestIt\Tes­tCase namespace. It should return created instance ready to
+use for testing. So createTestObject() is the right place for any initialization
+mock injections etc. It will be called during the setUp call. So just
+concentrate on new object creation, the rest is in hands of TestIt :-) If you
+need to call any expectations about any dependencies called in the time of test
+object creation, overwrite <strong>initializatio­nExpectations</strong> method
+and place your expectations there. This method will be called just before object
+creation in the setUp method.</p>
 
-<h3 id="toc-mocking-of-dependencies">Mocking of dependencies</h3>
+<h3>Mocking of dependencies</h3>
 
 <p>TestIt is helping you with creating of mocked classes. It contains something
-	like object locator so, it is not creating new mock every time. But you can get
-	the best value if you integrate TestIt capabilities with your DI.</p>
+like object locator so, it is not creating new mock every time. But you can get
+the best value if you integrate TestIt capabilities with your DI.</p>
 
-<h4 id="toc-creating-mocked-class">Creating mocked class</h4>
+<h4>Creating mocked class</h4>
 
-<p>You create mock by simply call simple method in your test class:</p>
+<p>You create mock by simply call simple method in your test class:</p>
 
-<pre class="php"><code><span class="php-var">$mock</span> = <span
-		class="php-var">$this</span>-&gt;getMockedClass(<span
-		class="php-var">$className</span>, <span
-		class="php-var">$mockName</span>);</code></pre>
+<pre
+class="php"><code>$mock = $this-&gt;getMockedClass($className, $mockName);</code></pre>
 
 <p>Notice that all created mocks have to have unique name. With this name, you
-	are referencing them in your expectations. It also allows you to have more mocks
-	of the same class (with different names). Mock-creation engine uses native
-	PHPUnit mocking, automatically mocking all public methods and adds call tracking
-	feature. All you have to do is to pass the mock to your class you are testing to
-	be called from there.</p>
+are referencing them in your expectations. It also allows you to have more mocks
+of the same class (with different names). Mock-creation engine uses native
+PHPUnit mocking, automatically mocking all public methods and adds call tracking
+feature. All you have to do is to pass the mock to your class you are testing to
+be called from there.</p>
 
-<h4 id="toc-creating-mocks-of-global-functions">Creating mocks of global
-	functions</h4>
+<h4>Creating mocks of global functions</h4>
 
 <p>TestIt allows you to mock global functions. Do it by calling
-	mockGlobalFunction function.</p>
+mockGlobalFunction function.</p>
 
-<pre class="php"><code><span class="php-keyword1">protected</span> <span
-		class="php-keyword1">function</span> mockGlobalFunction(<span
-		class="php-var">$name</span>, <span class="php-var">$namespace</span> = <span
-		class="php-keyword1">NULL</span>)
+<pre
+class="php"><code>protected function mockGlobalFunction($name, $namespace = NULL)
 
-<span
-		class="php-comment">//just call it before using global function
-</span><span
-			class="php-var">$this</span>-&gt;mockGlobalFunction(<span
-			class="php-quote">'time'</span>, <span
-			class="php-quote">'YourNamespace'</span>);
-<span
-		class="php-comment">//and then expect the call
-</span><span
-			class="php-var">$this</span>-&gt;expectDependencyCall(<span
-			class="php-quote">'global'</span>, <span class="php-quote">'time'</span>, <span
-			class="php-keyword1">array</span>(), <span
-			class="php-num">123456789</span>);</code></pre>
+//just call it before using global function
+$this-&gt;mockGlobalFunction('time', 'YourNamespace');
+//and then expect the call
+$this-&gt;expectDependencyCall('global', 'time', array(), 123456789);</code></pre>
 
 <p>Namespace argument is the namespace your time() function is called from. If
-	not provided, it will be set to the namespace mockGlobalFunction is
-	called from.</p>
+not provided, it will be set to the namespace mockGlobalFunction is
+called from.</p>
 
 <p>This is done by a namespace trick. If you are in namespace and call function,
-	it will be searched first in the current namespace and then in the global space.
-	So if not defined in the namespace, it will fall-back to global function.
-	mockGlobalFunction will define mock of the function in specific namespace so the
-	call will no longer fall-back to global space and mocked function will be
-	called. Notice, that once the function is defined in some namespace, it will be
-	called from anywhere in this namespace. Nevertheless TestIt will check and won't
-	redefine it again. But in terms of readability of your code, call
-	mockGlobalFunction everywhere you need it to be clear you are mocking
-	something.</p>
+it will be searched first in the current namespace and then in the global space.
+So if not defined in the namespace, it will fall-back to global function.
+mockGlobalFunction will define mock of the function in specific namespace so the
+call will no longer fall-back to global space and mocked function will be
+called. Notice, that once the function is defined in some namespace, it will be
+called from anywhere in this namespace. Nevertheless TestIt will check and won't
+redefine it again. But in terms of readability of your code, call
+mockGlobalFunction everywhere you need it to be clear you are mocking
+something.</p>
 
 <p>Therefore there is limitation here. You can mock only functions that are
-	called with unqualified name.</p>
+called with unqualified name.</p>
 
-<pre class="php"><code><span class="php-var">$timestamp</span> = <span
-		class="php-keyword2">time</span>();<span
-		class="php-comment">//can be mocked
-</span>
-<span
-		class="php-var">$timestamp</span> = \<span
-			class="php-keyword2">time</span>();<span
-			class="php-comment">//can NOT be mocked</span></code></pre>
+<pre
+class="php"><code>$timestamp = time();//can be mocked
+
+$timestamp = \time();//can NOT be mocked</code></pre>
 
 <p>There is one thing that is not working yet. Functions with output argument
-	can be mocked but output argument won't work. The main problem is, how to detect
-	output arguments? Any ideas? :-)</p>
+can be mocked but output argument won't work. The main problem is, how to detect
+output arguments? Any ideas? :-)</p>
 
-<h3 id="toc-expecting-what-should-happen">Expecting what should happen</h3>
+<h3>Expecting what should happen</h3>
 
 <p>In your tests, you are testing inputs and outputs, but you also have to test
-	class interactions with its dependencies. Meaning you have to test, that there
-	were correct methods called with correct parameters in correct order. These
-	methods usually return some data so it is necessary to ensure, that this data
-	will be returned.</p>
+class interactions with its dependencies. Meaning you have to test, that there
+were correct methods called with correct parameters in correct order. These
+methods usually return some data so it is necessary to ensure, that this data
+will be returned.</p>
 
 <p>In TestIt it is very easy to do so.</p>
 
-<pre class="php"><code><span
-		class="php-comment">//declaration of expectation method
-</span><span
-		class="php-keyword1">public</span> <span
-		class="php-keyword1">function</span> expectDependencyCall(<span
-		class="php-var">$dependencyName</span>, <span
-		class="php-var">$methodName</span>, <span
-		class="php-var">$methodArguments</span> = <span
-		class="php-keyword1">array</span>(), <span
-		class="php-var">$returnValue</span> = <span
-		class="php-keyword1">NULL</span>)
+<pre
+class="php"><code>//declaration of expectation method
+public function expectDependencyCall($dependencyName, $methodName, $methodArguments = array(), $returnValue = NULL)
 
-<span
-		class="php-comment">//practical use
-</span><span
-			class="php-var">$this</span>-&gt;expectDependencyCall(<span
-			class="php-quote">&quot;articleModel&quot;</span>, <span
-			class="php-quote">&quot;get&quot;</span>, <span
-			class="php-keyword1">array</span>(<span class="php-num">10</span>, <span
-			class="php-num">5</span>), <span class="php-keyword1">array</span>());
-<span
-		class="php-comment">//expects that on the &quot;articleModel&quot; dependency &quot;get&quot; method will be called with arguments (offset, limit) 10, 5 and it will return empty array
-</span>
-<span
-		class="php-comment">//valid call in tested class would be for example
-</span><span
-			class="php-var">$this</span>-&gt;articleModel-&gt;get(<span
-			class="php-num">10</span>,<span class="php-num">5</span>); <span
-			class="php-comment">//where $this-&gt;articleModel is a property where mock named &quot;articleModel&quot; is stored</span></code></pre>
+//practical use
+$this-&gt;expectDependencyCall("articleModel", "get", array(10, 5), array());
+//expects that on the "articleModel" dependency "get" method will be called with arguments (offset, limit) 10, 5 and it will return empty array
+
+//valid call in tested class would be for example
+$this-&gt;articleModel-&gt;get(10,5); //where $this-&gt;articleModel is a property where mock named "articleModel" is stored</code></pre>
 
 <p>Methods arguments will be expected to be exactly the same as you passed them
-	(in the array). Empty array means no arguments, NULL means that you don't care
-	so any arguments will be accepted. Optional arguments (with default value) can
-	be omitted.</p>
+(in the array). Empty array means no arguments, NULL means that you don't care
+so any arguments will be accepted. Optional arguments (with default value) can
+be omitted.</p>
 
 <p>As for return value, all values passed here will be returned by mock call
-	unchanged except instances of \Exception class (and its ancestors of course).
-	These instances will be thrown as exception. It allows you to simulate cases
-	where one of your dependencies fails.</p>
+unchanged except instances of \Exception class (and its ancestors of course).
+These instances will be thrown as exception. It allows you to simulate cases
+where one of your dependencies fails.</p>
 
-<h3 id="toc-defining-state-of-tested-object">Defining state of tested
-	object</h3>
+<h3>Defining state of tested object</h3>
 
 <p>Before launching the test, you must put tested object to defined state.
-	Against this state you will assert changes after the test. In order to have real
-	unit test, you shouldn’t use object's set methods etc. TestIt provides you
-	two methods for this purpose.</p>
+Against this state you will assert changes after the test. In order to have real
+unit test, you shouldn’t use object's set methods etc. TestIt provides you
+two methods for this purpose.</p>
 
-<h4 id="toc-setpropertyintestsubject">setPropertyIn­TestSubject</h4>
+<h4>setPropertyIn­TestSubject</h4>
 
-<pre class="php"><code><span class="php-keyword1">protected</span> <span
-		class="php-keyword1">function</span> setPropertyInTestSubject(<span
-		class="php-var">$name</span>, <span class="php-var">$value</span>)
+<pre
+class="php"><code>protected function setPropertyInTestSubject($name, $value)
 
-<span
-		class="php-comment">//example
-</span><span
-			class="php-var">$this</span>-&gt;setPropertyInTestSubject(<span
-			class="php-quote">'state'</span>, <span
-			class="php-quote">'notReady'</span>); <span
-			class="php-comment">//will set property 'state' to value 'notReady' in test object</span></code></pre>
+//example
+$this-&gt;setPropertyInTestSubject('state', 'notReady'); //will set property 'state' to value 'notReady' in test object</code></pre>
 
-<h4 id="toc-getpropertyfromtestsubject">getPropertyFrom­TestSubject</h4>
+<h4>getPropertyFrom­TestSubject</h4>
 
-<pre class="php"><code><span class="php-keyword1">protected</span> <span
-		class="php-keyword1">function</span> getPropertyFromTestSubject(<span
-		class="php-var">$name</span>)
+<pre
+class="php"><code>protected function getPropertyFromTestSubject($name)
 
-<span class="php-comment">//example
-</span><span
-			class="php-var">$this</span>-&gt;getPropertyFromTestSubject(<span
-			class="php-quote">'state'</span>); <span
-			class="php-comment">//return value of the 'state' property in test object</span></code></pre>
+//example
+$this-&gt;getPropertyFromTestSubject('state'); //return value of the 'state' property in test object</code></pre>
 
 <p>You can set/get any defined property from tested object. It is using
-	reflection. I noticed random occurrences of errors here. I wasn't able to
-	catch specific circumstances so far, but most of the time, it is working
-	fine :-)</p>
+reflection. I noticed random occurrences of errors here. I wasn't able to
+catch specific circumstances so far, but most of the time, it is working
+fine :-)</p>
 
-<h3 id="toc-call-method-to-test">Call method to test</h3>
+<h3>Call method to test</h3>
 
 <p>Use getTestObject() method to access instance of test object. If not created
-	yet, fresh instance will be created using the createTestObject() method.</p>
+yet, fresh instance will be created using the createTestObject() method.</p>
 
 <p>From time to time, it can be useful to call/test also a protected/private
-	method. TestIt provides you a simple method to call these methods.</p>
+method. TestIt provides you a simple method to call these methods.</p>
 
-<pre class="php"><code><span class="php-keyword1">protected</span> <span
-		class="php-keyword1">function</span> callTestSubjectMethod(<span
-		class="php-var">$name</span>, <span class="php-keyword1">array</span> <span
-		class="php-var">$arguments</span> = <span
-		class="php-keyword1">array</span>())
+<pre
+class="php"><code>protected function callTestSubjectMethod($name, array $arguments = array())
 
-<span
-		class="php-comment">//example
-</span><span
-			class="php-var">$this</span>-&gt;callTestSubjectMethod(<span
-			class="php-quote">'setState'</span>, <span
-			class="php-keyword1">array</span>(<span
-			class="php-quote">'ready'</span>)); <span
-			class="php-comment">//will call 'setState' method with one argument 'ready',  even it is protected/private</span></code></pre>
+//example
+$this-&gt;callTestSubjectMethod('setState', array('ready')); //will call 'setState' method with one argument 'ready',  even it is protected/private</code></pre>
 
 <p>It is not a good habit to call inaccessible methods but it can be
-	handy :-)</p>
+handy :-)</p>
 
-<h3 id="toc-asserting-end-conditions">Asserting end conditions</h3>
+<h3>Asserting end conditions</h3>
 
 <p>TestIt will automatically assert your expectations. For every dependency call
-	these assertions will be done runtime (in this order):</p>
+these assertions will be done runtime (in this order):</p>
 
 <ul>
 	<li>correct method on correct dependency is called in correct order (defined by
-		order of expectations)</li>
+	order of expectations)</li>
 
 	<li>actual arguments of the method called are asserted against expected ones. If
-		there is any of the methods arguments optional (with default value) and it is
-		omitted, default value will be filled to the expectation.</li>
+	there is any of the methods arguments optional (with default value) and it is
+	omitted, default value will be filled to the expectation.</li>
 </ul>
 
 <p>If any of this assertion fails the test will fail immediately. Meaningful
-	error message is generated, so it is clear what should have happened and what
-	actually happened.</p>
+error message is generated, so it is clear what should have happened and what
+actually happened.</p>
 
-<h3 id="toc-remote-debugging-of-php-cli-scripts">Remote debugging of PHP cli
-	scripts</h3>
+<h3>Remote debugging of PHP cli scripts</h3>
 
-<p>From version 1.2.0 TestIt comes with bash script, that will allowes you to
-	debug PHP cli scripts, running on server, on your local mashine. You can find
-	<strong>debugphpscript</strong> in your vendor/bin directory. All you have to do
-	is configure your IDE to be able of remote debugging with xDebug (consult help
-	for your IDE), set your IDE for listening for incoming xDebug session and than
-	launch your cli script you want to debug through
-	<strong>debugphpscript</strong>. You have to specify session_id of xDebug
-	session, in some cases (ex. PhpStorm) you have to specify name of you server
-	configuration in IDE, IP address of your local mashine is needed and of course,
-	you have to specify what command you want to run.</p>
+<p>From version 1.2.0 TestIt comes with bash script, that will allowes you to
+debug PHP cli scripts, running on server, on your local mashine. You can find
+<strong>debugphpscript</strong> in your vendor/bin directory. All you have to do
+is configure your IDE to be able of remote debugging with xDebug (consult help
+for your IDE), set your IDE for listening for incoming xDebug session and than
+launch your cli script you want to debug through
+<strong>debugphpscript</strong>. You have to specify session_id of xDebug
+session, in some cases (ex. PhpStorm) you have to specify name of you server
+configuration in IDE, IP address of your local mashine is needed and of course,
+you have to specify what command you want to run.</p>
 
 <pre><code>./debugphpscript -id PhpStorm -s myserver.local -ip 192.168.1.1 -c "my_script.php -f someConfiguration"</code></pre>
-
-
 
 </section>
 </div>
