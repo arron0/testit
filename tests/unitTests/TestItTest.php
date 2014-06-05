@@ -225,4 +225,10 @@ class TestItTest extends \Arron\TestIt\TestCase
 	{
 		$this->setterTest('setProtectedProperty', 142);
 	}
+
+	public function testExternalTestObjectCreationFails()
+	{
+		$this->setExpectedException('\LogicException');
+		$this->setTestObject(new \stdClass());
+	}
 }

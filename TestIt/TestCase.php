@@ -58,6 +58,15 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $this->testObject;
 	}
 
+	protected function setTestObject($object)
+	{
+		if(is_null($this->testObject)) {
+			$this->testObject = $object;
+			return;
+		}
+		throw new \LogicException('Test object is already set. If you want to create it externaly, you have to return NULL from createTestObject method.');
+	}
+
 	/**
 	 * @param string $name
 	 * @param string $namespace
