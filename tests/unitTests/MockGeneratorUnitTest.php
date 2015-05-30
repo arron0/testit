@@ -50,7 +50,6 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 				array('strpos', '$haystack, $needle, $offset = null'),
 				array('array_keys', '$arg, $search_value = null, $strict = null'),
 				array('next', '&$arg'),
-				array('array_map', '$callback, $arg, $arg2 = null'),
 		);
 	}
 }
