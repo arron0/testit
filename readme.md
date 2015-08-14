@@ -23,6 +23,10 @@ We are running our unit tests against PHP versions 5.3, 5.4 and 5.5 and against 
 
 Please report any bugs into GitHub. Thank you.
 
+## License
+
+You can use TestIt library under MIT license.
+
 ## Installation
 
 Use [composer](http://getcomposer.org) to install TestIt. Just add **arron/testit** project as your dependency.
