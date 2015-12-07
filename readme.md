@@ -19,7 +19,7 @@ TestIt can help you with most of the steps.
 - Version 1.* is compatible with PHPUnit 3.7.*
 - Version 2.* is compatible with PHPUnit 4.*
 
-We are running our unit tests against PHP versions 5.3, 5.4 and 5.5 and against HHVM.
+We are running our unit tests against PHP versions 5.3, 5.4, 5.5, 7 and against HHVM.
 
 Please report any bugs into GitHub. Thank you.
 
@@ -167,7 +167,7 @@ If any of this assertion fails the test will fail immediately. Meaningful error 
 
 ### Remote debugging of PHP cli scripts
 
-From version 1.2.0 TestIt comes with bash script, that will allowes you to debug PHP cli scripts, running on server, on your local mashine. You can find **debugphpscript** in your vendor/bin directory.
+From version 1.2.0 TestIt comes with bash script, that allowes you to debug PHP cli scripts, running on server, on your local mashine. You can find **debugphpscript** in your vendor/bin directory.
 All you have to do is configure your IDE to be able of remote debugging with xDebug (consult help for your IDE), set your IDE for listening for incoming xDebug session and than launch your
 cli script you want to debug through **debugphpscript**. You have to specify session_id of xDebug session, in some cases (ex. PhpStorm) you have to specify name of you server
 configuration in IDE, IP address of your local mashine is needed and of course, you have to specify what command you want to run.
