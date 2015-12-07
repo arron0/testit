@@ -18,6 +18,7 @@ TestIt can help you with most of the steps.
 
 - Version 1.* is compatible with PHPUnit 3.7.*
 - Version 2.* is compatible with PHPUnit 4.*
+- Version 3.* is compatible with PHPUnit 5.*
 
 We are running our unit tests against PHP versions 5.3, 5.4, 5.5, 7 and against HHVM.
 
