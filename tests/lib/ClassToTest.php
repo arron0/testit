@@ -35,7 +35,7 @@ class ClassToTest
 
 	protected $protectedProperty = 1;
 
-	function __construct(ITest $dependency1, ITest $dependency2)
+	public function __construct(ITest $dependency1, ITest $dependency2)
 	{
 		$this->dependency1 = $dependency1;
 		$this->dependency2 = $dependency2;
