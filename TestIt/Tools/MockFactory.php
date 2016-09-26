@@ -183,6 +183,13 @@ class MockFactory
 		$publicMethods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
 		foreach ($publicMethods as $method) {
+		    if($method->isConstructor()) {
+		        //sometimes (not sure when) I get error:
+		        //Trying to configure method "__construct" which
+                //cannot be configured because it does not exist,
+                //has not been specified, is final, or is static
+                continue;
+            }
 			$methodName = $method->getName();
 			$methodIdentificator = $mockName . '-' . $method->getName();
 			$this->saveMethodParameters($methodIdentificator, $method->getParameters());
