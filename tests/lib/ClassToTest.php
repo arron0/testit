@@ -33,9 +33,14 @@ class ClassToTest
 	 */
 	protected $dependency2;
 
+    /**
+     * @var ITest
+     */
+	protected $dependency3;
+
 	protected $protectedProperty = 1;
 
-	public function __construct(ITest $dependency1, ITest $dependency2)
+	public function __construct(ITest $dependency1, ITest $dependency2, AbstractDependency $dependecy3)
 	{
 		$this->dependency1 = $dependency1;
 		$this->dependency2 = $dependency2;

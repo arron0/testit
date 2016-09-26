@@ -42,7 +42,11 @@ class TestItTest extends \Arron\TestIt\TestCase
 	 */
 	protected function createTestObject()
 	{
-		return new ClassToTest($this->getMockedClass('\Arron\TestIt\Tests\TestNamespace\ITest', 'dependency1'), $this->getMockedClass('\Arron\TestIt\Tests\TestNamespace\ITest', 'dependency2'));
+		return new ClassToTest(
+		    $this->getMockedClass('\Arron\TestIt\Tests\TestNamespace\ITest', 'dependency1'),
+            $this->getMockedClass('\Arron\TestIt\Tests\TestNamespace\ITest', 'dependency2'),
+            $this->getMockedClass('\Arron\TestIt\Tests\TestNamespace\AbstractDependency', 'dependency3')
+        );
 	}
 
 	public function testDependenciesExpectAndReturnValues()
