@@ -13,7 +13,7 @@ namespace Arron\TestIt\Tests;
 use Arron\TestIt\Tests\TestNamespace\ClassToTest;
 use Arron\TestIt\Tests\TestNamespace\TestException;
 use Arron\TestIt\Tools\FunctionsCallLoggerException;
-use PHPUnit_Framework_ExpectationFailedException;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * TestItTest class definition
@@ -68,7 +68,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 		try {
 			$this->getTestObject()->callDependencies(3, 4);
-		} catch (PHPUnit_Framework_ExpectationFailedException $e) {
+		} catch (ExpectationFailedException $e) {
 			$success = TRUE;
 		}
 
@@ -97,9 +97,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 			$success = TRUE;
 		}
 
-		if (!$success) {
-			$this->fail('Fails in failing with less expectations than actually called.');
-		}
+		$this->assertTrue($success, 'Fails in failing with less expectations than actually called.');
 	}
 
 	public function testCalledDependencyParameterCheck()
@@ -121,7 +119,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 		try {
 			$this->getTestObject()->callDependency('anyParameter');
-		} catch (PHPUnit_Framework_ExpectationFailedException $e) {
+		} catch (ExpectationFailedException $e) {
 			$success = TRUE;
 		}
 
@@ -140,7 +138,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 		try {
 			$this->getTestObject()->callDependency($parameter);
-		} catch (PHPUnit_Framework_ExpectationFailedException $e) {
+		} catch (ExpectationFailedException $e) {
 			$success = TRUE;
 		}
 
@@ -151,6 +149,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 	public function testCalledDependencyParameterNotChecked()
 	{
+		$this->assertTrue(true); //need to be there because of possibly "This test did not perform any asserions" message
 		$this->expectDependencyCall('dependency1', 'doSomething', NULL, 'anyValue');
 		$this->getTestObject()->callDependency('anyParameter');
 	}
@@ -168,7 +167,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 	{
 		$this->expectDependencyCall('dependency1', 'doSomething', NULL, new TestException());
 
-		$this->setExpectedException('\Arron\TestIt\Tests\TestNamespace\TestException');
+		$this->expectException('\Arron\TestIt\Tests\TestNamespace\TestException');
 
 		$this->getTestObject()->callDependency('anyParameter');
 	}
@@ -220,7 +219,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 	public function testCallUnknownMethodOnTestObject()
 	{
-		$this->setExpectedException('\InvalidArgumentException');
+		$this->expectException('\InvalidArgumentException');
 
 		$this->callTestSubjectMethod('unknownMethod', array());
 	}
@@ -232,7 +231,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 
 	public function testExternalTestObjectCreationFails()
 	{
-		$this->setExpectedException('\LogicException');
+		$this->expectException('\LogicException');
 		$this->setTestObject(new \stdClass());
 	}
 }
