@@ -17,7 +17,7 @@ namespace Arron\TestIt;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license http://opensource.org/licenses/MIT MIT
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 	/** @var object */
 	private $testObject;

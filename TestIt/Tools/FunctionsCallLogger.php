@@ -9,6 +9,8 @@
  */
 namespace Arron\TestIt\Tools;
 
+use PHPUnit\Framework\Assert;
+
 /**
  * FunctionsCallLogger class definition
  *
@@ -192,7 +194,7 @@ class FunctionsCallLogger
 		self::$passedFunctions[] = $expectedName;
 
 		if ($name != $expectedName) {
-			\PHPUnit_Framework_Assert::assertEquals(
+			Assert::assertEquals(
 				self::$passedFunctions, self::getLoggedFunctions(),
 				"It was supposed '$expectedName' to be called , '$name' called instead. See expectation difference below."
 			);
@@ -216,7 +218,7 @@ class FunctionsCallLogger
 		$expectedArguments = self::fillDefaultArguments($name, $expectedArguments);
 
 		$serializedFunctionCalls = implode("\n", self::getLoggedFunctions());
-		\PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			$expectedArguments, $arguments,
 			"Arguments validation failed for function '$name' called as last function of this log:\n\n" . $serializedFunctionCalls . "\n\n
             (!!Arguments maight have been filled with default values!!)"

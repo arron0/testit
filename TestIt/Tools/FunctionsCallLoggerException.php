@@ -17,7 +17,7 @@ namespace Arron\TestIt\Tools;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license http://opensource.org/licenses/MIT MIT
  */
-class FunctionsCallLoggerException extends \PHPUnit_Framework_AssertionFailedError
+class FunctionsCallLoggerException extends \PHPUnit\Framework\AssertionFailedError
 {
 
 }
