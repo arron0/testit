@@ -14,6 +14,7 @@ use Arron\TestIt\Tests\TestNamespace\ClassToTest;
 use Arron\TestIt\Tests\TestNamespace\TestException;
 use Arron\TestIt\Tools\FunctionsCallLoggerException;
 use PHPUnit\Framework\ExpectationFailedException;
+use Throwable;
 
 /**
  * TestItTest class definition
@@ -30,7 +31,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 	/*
 	 * Specific behaviour for testExpectingMoreCallsThanCalled that should fail.
 	 */
-	protected function onNotSuccessfulTest($e)
+	protected function onNotSuccessfulTest(Throwable $e)
 	{
 		if (($this->getName() != "testExpectingMoreCallsThanCalled") && ($e->getMessage() != "'dependency2::doSomething' expected to be called but wasn't/weren't.")) {
 			throw $e;
