@@ -20,6 +20,8 @@ Compatibility
 - Version 1.* is compatible with PHPUnit 3.7.* and requires PHP versions 5.3, 5.4, 5.5, 5.6, 7 or HHVM.
 - Version 2.* is compatible with PHPUnit 4.* and requires PHP versions 5.3, 5.4, 5.5, 5.6, 7 or HHVM.
 - Version 3.* is compatible with PHPUnit 5.* and requires PHP versions 5.6, 7 or HHVM.
+- Version 4.* is compatible with PHPUnit 6.* and requires PHP versions 7.0 (or above).
+	On HHVM there is a problem with PHPUnit 6.*, it won't install because HHVM can't satisfy PHP 7.0 requirement.
 
 In latest version we are running our unit tests against PHP versions 5.6, 7 and against HHVM.
 
