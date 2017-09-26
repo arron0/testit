@@ -173,22 +173,23 @@ class FunctionsCallLogger
 	 */
 	protected static function validateFunctionCall($name, array $arguments)
 	{
-		self::validateFunctionName($name);
+		self::validateFunctionName($name, $arguments);
 		self::validateFunctionArguments($name, $arguments);
 	}
 
 	/**
 	 * @param string $name
+	 * @param array $arguments
 	 *
 	 * @return void
 	 *
-	 * @throws FunctionsCallLoggerException
 	 */
-	protected static function validateFunctionName($name)
+	protected static function validateFunctionName($name, array $arguments)
 	{
 		$expectedName = self::getNextExpectedFunction();
 		if (is_null($expectedName)) {
-			throw new FunctionsCallLoggerException("Call of function $name wasn't expected.");
+			$argumentsString = '(' . implode(', ', $arguments) . ')';
+			throw new FunctionsCallLoggerException("Call of function {$name}{$argumentsString} wasn't expected.");
 		}
 
 		self::$passedFunctions[] = $expectedName;
