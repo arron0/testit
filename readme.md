@@ -20,7 +20,7 @@ TestIt can help you with most of the steps.
 - Version 2.* is compatible with PHPUnit 4.* and requires PHP versions 5.3, 5.4, 5.5, 5.6, 7 or HHVM.
 - Version 3.* is compatible with PHPUnit 5.* and requires PHP versions 5.6, 7 or HHVM.
 - Version 4.* is compatible with PHPUnit <6.5 and requires PHP versions 7.0 or above.
-- Version 5.* is compatible with PHPUnit >=6.5 and requires PHP version 7.0 or above.
+- Version 5.* is compatible with PHPUnit >=6.5 and <8.0.0 and requires PHP version 7.0 or above.
 	On HHVM there is a problem with PHPUnit 6.5, it won't install because HHVM can't satisfy PHP 7.0 requirement.
 
 In latest version we are running our unit tests against PHP versions 7.0, 7.1, 7.2.
