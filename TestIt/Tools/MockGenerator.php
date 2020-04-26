@@ -10,7 +10,8 @@
 
 namespace Arron\TestIt\Tools;
 
-use PHPUnit_Framework_MockObject_Exception;
+use PHPUnit\Framework\MockObject\Generator;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -23,7 +24,7 @@ use ReflectionMethod;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-class MockGenerator extends \PHPUnit_Framework_MockObject_Generator
+class MockGenerator extends Generator
 {
 	/**
 	 * Returns the parameters of a function or method.
@@ -63,7 +64,7 @@ class MockGenerator extends \PHPUnit_Framework_MockObject_Generator
 					try {
 						$class = $parameter->getClass();
 					} catch (ReflectionException $e) {
-						throw new PHPUnit_Framework_MockObject_Exception(
+						throw new RuntimeException(
 								sprintf(
 										'Cannot mock %s::%s() because a class or ' .
 										'interface used in the signature is not loaded',
@@ -100,4 +101,3 @@ class MockGenerator extends \PHPUnit_Framework_MockObject_Generator
 		return join(', ', $parameters);
 	}
 }
- 

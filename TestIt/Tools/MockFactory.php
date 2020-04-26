@@ -9,7 +9,9 @@
  */
 namespace Arron\TestIt\Tools;
 
-use PHPUnit_Framework_MockObject_Generator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 
 /**
  * MockFactory class definition
@@ -116,7 +118,7 @@ class MockFactory
 	 *
 	 * @return void
 	 */
-	protected function addMockedClass($mockName, \PHPUnit_Framework_MockObject_MockObject $mock)
+	protected function addMockedClass($mockName, MockObject $mock)
 	{
 		$this->mockClasses[$mockName] = $mock;
 	}
@@ -193,9 +195,9 @@ class MockFactory
 			$methodName = $method->getName();
 			$methodIdentificator = $mockName . '-' . $method->getName();
 			$this->saveMethodParameters($methodIdentificator, $method->getParameters());
-			$mock->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount())
+			$mock->expects(new AnyInvokedCount())
 					->method($methodName)
-					->will(new \PHPUnit_Framework_MockObject_Stub_ReturnCallback('\Arron\TestIt\Tools\FunctionsCallLogger::' . $methodIdentificator));
+					->will(new ReturnCallback('\Arron\TestIt\Tools\FunctionsCallLogger::' . $methodIdentificator));
 		}
 		return $mock;
 	}

@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"require": {
 		"php": ">=7.0",
-		"phpunit/phpunit": "6.*"
+		"phpunit/phpunit": ">=6.5 <8.0.0"
 	},
 	"require-dev": {
 		"phing/phing": "*",
@@ -26,6 +26,9 @@
 		"classmap": ["TestIt/"]
 	},
 	"bin": ["TestIt/bin/debugphpscript"],
+	"scripts": {
+		"tests-unit": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
+	},
 	"authors": [
 		{
 			"name": "Tomáš Lembacher",
