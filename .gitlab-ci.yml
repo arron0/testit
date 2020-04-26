@@ -2,6 +2,6 @@ stages:
   - test
 
 test:
-  image: php:7.1-extra
+  image: php:7.1-extra:latest
   script:
     - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
