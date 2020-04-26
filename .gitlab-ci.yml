@@ -23,4 +23,4 @@ before_script:
 # If Xdebug was installed you can generate a coverage report and see code coverage metrics.
 test:
   script:
-  - vendor/bin/phpunit --configuration tests/testsConfig.xml --coverage-text --colors=never
+  - vendor/bin/phpunit --configuration tests/testsConfig.xml --coverage-text --colors=never tests/unitTests
