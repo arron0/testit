@@ -4,4 +4,5 @@ stages:
 test:
   image: php7.1-extra
   script:
+    - composer install
     - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
