@@ -23,4 +23,4 @@ before_script:
 # If Xdebug was installed you can generate a coverage report and see code coverage metrics.
 test:
   script:
-  - tests/runUnitTests
+  - vendor/bin/phpunit --configuration ./testsConfig.xml unitTests
