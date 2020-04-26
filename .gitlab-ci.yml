@@ -6,3 +6,7 @@ test:
   script:
     - composer install
     - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - vendor/
