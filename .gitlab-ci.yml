@@ -4,6 +4,7 @@ stages:
 test:
   image: php7.1-extra
   script:
+    - composer update --lock
     - composer install
     - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
   cache:
