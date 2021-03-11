@@ -7,7 +7,7 @@ Unit Tests PHP 7.1:
   script:
     - composer update --lock
     - composer install
-    - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
+    - composer unit-tests
 
 Unit Tests PHP 7.2:
   stage: test
@@ -15,7 +15,7 @@ Unit Tests PHP 7.2:
   script:
     - composer update --lock
     - composer install
-    - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
+    - composer unit-tests
 
 Unit Tests PHP 7.3:
   stage: test
@@ -23,7 +23,7 @@ Unit Tests PHP 7.3:
   script:
     - composer update --lock
     - composer install
-    - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
+    - composer unit-tests
 
 Unit Tests PHP 7.4:
   stage: test
@@ -31,4 +31,4 @@ Unit Tests PHP 7.4:
   script:
     - composer update --lock
     - composer install
-    - vendor/bin/phpunit --configuration ./tests/testsConfig.xml tests/unitTests
+    - composer unit-tests

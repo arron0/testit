@@ -14,10 +14,6 @@
 		"phpunit/phpunit": ">=6.5 <8.0.0"
 	},
 	"require-dev": {
-		"phing/phing": "*",
-		"pdepend/pdepend": "*",
-		"phploc/phploc": "*",
-		"phpmd/phpmd" : "*",
 		"sebastian/phpcpd": "*",
 		"arron/cli-texy-converter": "1.0.2"
 	},
@@ -27,7 +23,7 @@
 	},
 	"bin": ["TestIt/bin/debugphpscript"],
 	"scripts": {
-		"tests-unit": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
+		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},
 	"authors": [
 		{
