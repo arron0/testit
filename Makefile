@@ -8,7 +8,8 @@ build:
 
 composer:
 	docker run --rm --interactive --tty \
-      --network="host" \
+      --network="bridge" \
+      --cpus=2 \
       --volume $(PWD):/usr/src \
       arron/testit-dev composer $(cmd)
 
@@ -20,6 +21,9 @@ composer-update:
 
 phpcs:
 	make composer cmd="phpcs"
+
+phpcsfix:
+	make composer cmd="phpcsfix"
 
 phpstan:
 	make composer cmd='phpstan'

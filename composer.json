@@ -26,6 +26,7 @@
 	"bin": ["TestIt/bin/debugphpscript"],
 	"scripts": {
 		"phpcs": "phpcs --standard=phpcs.xml TestIt",
+		"phpcsfix": "phpcbf --standard=phpcs.xml TestIt",
 		"phpstan": "phpstan analyse -c phpstan.neon",
 		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},
