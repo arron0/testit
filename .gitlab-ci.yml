@@ -1,5 +1,31 @@
 stages:
+  - code style
+  - static analysis
   - test
+
+Code sniffer:
+  stage: code style
+  image: php7.4-extra
+  script:
+    - composer install
+    - composer phpcs
+  cache:
+    key: $CI_COMMIT_SHORT_SHA
+    paths:
+      - vendor
+  allow_failure: true
+
+PhpStan:
+  stage: static analysis
+  image: php7.4-extra
+  script:
+    - composer install
+    - composer phpstan
+  cache:
+    key: $CI_COMMIT_SHORT_SHA
+    paths:
+      - vendor
+  allow_failure: true
 
 Unit Tests PHP 7.1:
   stage: test
