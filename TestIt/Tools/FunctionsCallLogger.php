@@ -1,12 +1,5 @@
 <?php
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package Arron
- * @subpackage TestIt
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license http://opensource.org/licenses/MIT MIT
- */
+
 namespace Arron\TestIt\Tools;
 
 use PHPUnit\Framework\Assert;
@@ -196,7 +189,8 @@ class FunctionsCallLogger
 
 		if ($name != $expectedName) {
 			Assert::assertEquals(
-				self::$passedFunctions, self::getLoggedFunctions(),
+				self::$passedFunctions,
+				self::getLoggedFunctions(),
 				"It was supposed '$expectedName' to be called , '$name' called instead. See expectation difference below."
 			);
 		}
@@ -220,7 +214,8 @@ class FunctionsCallLogger
 
 		$serializedFunctionCalls = implode("\n", self::getLoggedFunctions());
 		Assert::assertEquals(
-			$expectedArguments, $arguments,
+			$expectedArguments,
+			$arguments,
 			"Arguments validation failed for function '$name' called as last function of this log:\n\n" . $serializedFunctionCalls . "\n\n
             (!!Arguments maight have been filled with default values!!)"
 		);
@@ -266,11 +261,11 @@ class FunctionsCallLogger
 	protected static function getNextExpectedFunction()
 	{
 		if (!array_key_exists('functions', self::$expectedCalls)) {
-			return NULL;
+			return null;
 		}
 
 		if (!array_key_exists(0, self::$expectedCalls['functions'])) {
-			return NULL;
+			return null;
 		}
 		return array_shift(self::$expectedCalls['functions']);
 	}
@@ -281,11 +276,11 @@ class FunctionsCallLogger
 	protected static function getNextExpectedArguments()
 	{
 		if (!array_key_exists('arguments', self::$expectedCalls)) {
-			return NULL;
+			return null;
 		}
 
 		if (!array_key_exists(0, self::$expectedCalls['arguments'])) {
-			return NULL;
+			return null;
 		}
 		return array_shift(self::$expectedCalls['arguments']);
 	}
@@ -297,7 +292,7 @@ class FunctionsCallLogger
 	 *
 	 * @return void
 	 */
-	public static function expectFunctionCall($functionName, array $functionArguments = NULL, $expectedResult = NULL)
+	public static function expectFunctionCall($functionName, array $functionArguments = null, $expectedResult = null)
 	{
 		self::addExpectedFunctionCall($functionName, $functionArguments);
 		ResultProvider::addResultForFunction($functionName, $expectedResult);
@@ -309,7 +304,7 @@ class FunctionsCallLogger
 	 *
 	 * @return void
 	 */
-	protected static function addExpectedFunctionCall($name, array $arguments = NULL)
+	protected static function addExpectedFunctionCall($name, array $arguments = null)
 	{
 		self::addExpectedFunction($name);
 		self::addExpectedArguments($arguments);
@@ -330,7 +325,7 @@ class FunctionsCallLogger
 	 *
 	 * @return void
 	 */
-	protected static function addExpectedArguments(array $arguments = NULL)
+	protected static function addExpectedArguments(array $arguments = null)
 	{
 		self::$expectedCalls['arguments'][] = $arguments;
 	}

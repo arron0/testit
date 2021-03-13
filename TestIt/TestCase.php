@@ -1,12 +1,5 @@
 <?php
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package Arron
- * @subpackage TestIt
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license http://opensource.org/licenses/MIT MIT
- */
+
 namespace Arron\TestIt;
 
 /**
@@ -37,7 +30,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$this->resetFunctionLog();
 		$this->initializationExpectations();
 		$this->testObject = $this->createTestObject();
-		$this->setupCheck = TRUE;
+		$this->setupCheck = true;
 	}
 
 	/**
@@ -60,11 +53,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function setTestObject($object)
 	{
-		if(is_null($this->testObject)) {
+		if (is_null($this->testObject)) {
 			$this->testObject = $object;
 			return;
 		}
-		throw new \LogicException('Test object is already set. If you want to create it externaly, you have to return NULL from createTestObject method.');
+		throw new \LogicException('Test object is already set. If you want to create it externaly, you have to return null from createTestObject method.');
 	}
 
 	/**
@@ -73,7 +66,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 *
 	 * @return void
 	 */
-	protected function mockGlobalFunction($name, $namespace = NULL)
+	protected function mockGlobalFunction($name, $namespace = null)
 	{
 		$namespace = is_null($namespace) ? $this->getReflection($this)->getNamespaceName() : $namespace;
 		$this->getMockFactory()->createMockOfGlobalFunctionInNamespace($name, $namespace);
@@ -112,12 +105,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param string $dependencyName
 	 * @param string $methodName
-	 * @param array|null $methodArguments NULL if you want to skip check
+	 * @param array|null $methodArguments null if you want to skip check
 	 * @param mixed|\Exception $returnValue If instance of Exception it will be thrown
 	 *
 	 * @return void
 	 */
-	protected function expectDependencyCall($dependencyName, $methodName, $methodArguments = array(), $returnValue = NULL)
+	protected function expectDependencyCall($dependencyName, $methodName, $methodArguments = array(), $returnValue = null)
 	{
 		$methodName = $dependencyName . '::' . $methodName;
 		$this->expectFunctionCall($methodName, $methodArguments, $returnValue);
@@ -130,7 +123,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 *
 	 * @return void
 	 */
-	private function expectFunctionCall($name, array $arguments = NULL, $expectedResult = NULL)
+	private function expectFunctionCall($name, array $arguments = null, $expectedResult = null)
 	{
 		Tools\FunctionsCallLogger::expectFunctionCall($name, $arguments, $expectedResult);
 	}
@@ -146,7 +139,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$reflection = $this->getTestSubjectReflection();
 		if ($reflection->hasProperty($name)) {
 			$property = $reflection->getProperty($name);
-			$property->setAccessible(TRUE);
+			$property->setAccessible(true);
 			$property->setValue($this->getTestObject(), $value);
 		}
 	}
@@ -161,26 +154,26 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$reflection = $this->getTestSubjectReflection();
 		if ($reflection->hasProperty($name)) {
 			$property = $reflection->getProperty($name);
-			$property->setAccessible(TRUE);
+			$property->setAccessible(true);
 			return $property->getValue($this->getTestObject());
 		}
-		return NULL;
+		return null;
 	}
 
 	/**
 	 * @param string $name
 	 * @param array $arguments
 	 *
+	 * @return mixed
 	 * @throws \InvalidArgumentException
 	 *
-	 * @return mixed
 	 */
 	protected function callTestSubjectMethod($name, array $arguments = array())
 	{
 		$reflection = $this->getTestSubjectReflection();
 		if ($reflection->hasMethod($name)) {
 			$method = $reflection->getMethod($name);
-			$method->setAccessible(TRUE);
+			$method->setAccessible(true);
 			return $method->invokeArgs($this->getTestObject(), $arguments);
 		}
 		throw new \InvalidArgumentException("You are trying to call non-existing '$name' method on testing object.");
@@ -213,7 +206,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 *
 	 * @return void
 	 */
-	protected function setterTest($setterName, $testValue, $propertyName = NULL)
+	protected function setterTest($setterName, $testValue, $propertyName = null)
 	{
 		if (is_null($propertyName)) {
 			$propertyName = substr($setterName, 3);

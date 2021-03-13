@@ -1,12 +1,4 @@
 <?php
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
 
 namespace Arron\TestIt\Tools;
 
@@ -29,13 +21,13 @@ class MockGenerator extends Generator
 	/**
 	 * Returns the parameters of a function or method.
 	 *
-	 * @param  ReflectionFunction $function
-	 * @param  boolean $forCall
+	 * @param ReflectionFunction $function
+	 * @param boolean $forCall
 	 *
 	 * @return string
 	 * @since  Method available since Release 2.0
 	 */
-	public function getFunctionParameters(ReflectionFunction $function, $forCall = FALSE)
+	public function getFunctionParameters(ReflectionFunction $function, $forCall = false)
 	{
 		$parameters = array();
 
@@ -56,34 +48,32 @@ class MockGenerator extends Generator
 			if (!$forCall) {
 				if ($parameter->isArray()) {
 					$typeHint = 'array ';
-				} elseif ((defined('HHVM_VERSION') || version_compare(PHP_VERSION, '5.4.0', '>='))
-						&& $parameter->isCallable()
-				) {
+				} elseif (version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable()) {
 					$typeHint = 'callable ';
 				} else {
 					try {
 						$class = $parameter->getClass();
 					} catch (ReflectionException $e) {
 						throw new RuntimeException(
-								sprintf(
-										'Cannot mock %s::%s() because a class or ' .
-										'interface used in the signature is not loaded',
-										'global',
-										$function->getName()
-								),
-								0,
-								$e
+							sprintf(
+								'Cannot mock %s::%s() because a class or ' .
+								'interface used in the signature is not loaded',
+								'global',
+								$function->getName()
+							),
+							0,
+							$e
 						);
 					}
 
-					if ($class !== NULL) {
+					if ($class !== null) {
 						$typeHint = $class->getName() . ' ';
 					}
 				}
 
 				if ($parameter->isDefaultValueAvailable()) {
 					$value = $parameter->getDefaultValue();
-					$default = ' = ' . var_export($value, TRUE);
+					$default = ' = ' . var_export($value, true);
 				} else {
 					if ($parameter->isOptional()) {
 						$default = ' = null';
