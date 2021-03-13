@@ -16,6 +16,7 @@
 	"require-dev": {
 		"sebastian/phpcpd": "*",
 		"arron/cli-texy-converter": "1.0.2",
+		"squizlabs/php_codesniffer": "*",
 		"phpstan/phpstan": "*"
 	},
 	"minimum-stability": "dev",
@@ -24,6 +25,7 @@
 	},
 	"bin": ["TestIt/bin/debugphpscript"],
 	"scripts": {
+		"phpcs": "phpcs --standard=phpcs.xml TestIt",
 		"phpstan": "phpstan analyse -c phpstan.neon",
 		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},

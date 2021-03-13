@@ -18,6 +18,9 @@ composer-install:
 composer-update:
 	make composer cmd="update"
 
+phpcs:
+	make composer cmd="phpcs"
+
 phpstan:
 	make composer cmd='phpstan'
 
