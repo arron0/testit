@@ -15,7 +15,8 @@
 	},
 	"require-dev": {
 		"sebastian/phpcpd": "*",
-		"arron/cli-texy-converter": "1.0.2"
+		"arron/cli-texy-converter": "1.0.2",
+		"phpstan/phpstan": "*"
 	},
 	"minimum-stability": "dev",
 	"autoload": {
@@ -23,6 +24,7 @@
 	},
 	"bin": ["TestIt/bin/debugphpscript"],
 	"scripts": {
+		"phpstan": "phpstan analyse -c phpstan.neon",
 		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},
 	"authors": [

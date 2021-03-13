@@ -6,17 +6,26 @@ help:
 build:
 	docker build --file ./Dockerfile --tag arron/testit-dev ./
 
-composer-install:
+composer:
 	docker run --rm --interactive --tty \
+      --network="host" \
       --volume $(PWD):/usr/src \
-      arron/testit-dev composer install
+      arron/testit-dev composer $(cmd)
+
+composer-install:
+	make composer cmd="install"
 
 composer-update:
-	docker run --rm --interactive --tty \
-      --volume $(PWD):/usr/src \
-      arron/testit-dev composer update
+	make composer cmd="update"
+
+phpstan:
+	make composer cmd='phpstan'
 
 unit-tests:
+	make composer cmd="unit-tests"
+
+ls:
 	docker run --rm --interactive --tty \
-      --volume $(PWD):/usr/src \
-      arron/testit-dev composer unit-tests
+          --network="host" \
+          --volume $(PWD):/usr/src \
+          arron/testit-dev composer install
