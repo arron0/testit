@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" lang="CZ-cs">
+	<title>TestIt</title>
+</head>
+<body>
+<h1>
+	Knihovna TestIt pro PHPUnit
+</h1>
+<p>
+	Píšete jednotkové testy v PHPUnitu? A také vás obtěžuje zdlouhavá a upovídaná konstrukce $this->getMock()->expects()->method()->with()->will()?
+	Právě pro vás je tu nadstavbová knihovna TestIt,
+	která tuto konstrukci obchází a zároveň rozšiřuje možnosti mockování závislostí PHPUnitu.
+</p>
+<p>
+	Přiznám se, že jsem nikdy na psaní testů nepoužil jinou knihovnu než právě PHPUnit. Proč jsem nezkusil například Nette Test (ačkoliv jsem zavilý
+	Nettista)? Prostě jsem neměl tu potřebu a PHPUnit vyhovoval všem mým požadavkům. Tedy skoro všem.
+</p>
+<p>
+	Ačkoliv má PHPUnit skvělé nástroje pro vytváření mocků, definice očekávaných volání (tzn. expectů; omlouvám se všem vlastencům, ale v dalším textu budu počešťovat anglický termín expect)
+	je krajně nepřehledná, zdlouhavá a nudná. Nejdříve jsem chtěl použít nějaký jiný nástroj (třeba Mockista),
+	synax je ale u všech těchto nástrojů podobná.
+</p>
+<p>
+	Co se má v testu stát, když nenadefinuji žádný expect? Osobně mám za to, že když se stane něco, co neočekávám (čili jsem nenadefinoval žádné
+	očekávání), tak test musí nutně spadnout. V případě
+	PHPUnitu tomu ale tak není a v případě, že se zavolá v mocku neočekávaně nějaká metoda, se kterou jsme nepočítali (takže jsme nenadefinovali, že
+	neočekáváme její volání), celý test v klidu projde
+	a programátor se nic nedozví. Tento problém mi při psaní testů přišel natolik zásadní, že jsem ho prostě musel obejít.
+</p>
+
+<h2>
+	TestIt
+</h2>
+
+<p>
+	Postupně tak vzniklo několik málo tříd, které jsem se nakonec rozhodl vyrefaktorovat ze své testovací knihovny do samostatného projektu TestIt,
+	který bych vám dnes rád představil.
+</p>
+<p>
+	TestIt je jednoduchá knihovna, která definuje vlastní TestCase třídu. Ta rozšiřuje možnosti PHPUnitu, ale přitom programátorovi nic nenutí, stále
+	je možné používat všechny běžné konstrukce. TestIt ale používá rozdílnou filozofii pří práci s mocky. Běžně se s mocky pracuje tak,
+	že se vytvoří mock a následně se definuje, jak se tento mock má chovat:
+</p>
+<pre>
+	//příklad je převzatý z dokumentace PHPUnitu
+	$observer = $this->getMock('Observer', array('update'));
+	$observer
+			->expects($this->once())
+			->method('update')
+			->with($this->equalTo('something'));
+</pre>
+<p>
+	To je ale nepraktické, protože v každém testu je potřeba mock definovat, získat jeho instanci a pomocí poměrně zdlouhavého zápisu upravit jeho chování.
+	Při použítí knihovny TestIt stačí definovat všechny mocky na jednom místě (při vytváření testovaného objektu) a v jednotlivých testech již pouze definovat
+	očekávané chování testovaného objektu. O mocky už se v testech nemusíme starat, jen definujeme jaká volání závislostí očekáváme, s jakými parametry
+	a co se nám hodí, aby nám daná závislost v daném testu vrátila.
+</p>
+<h2>
+	Instalace
+</h2>
+<p>
+	TestIt nainstalujte jednoduše přes Composer. Do svých závislostí přidejte arron/TestIt.
+<pre>
+{
+	"require": {
+		"arron/testit": "1.1.0",
+    },
+}
+
+</pre>
+<p>
+	Popřípadě si můžete stáhnout zdrojový kód na <a href="https://github.com/arron0/testit">GitHubu</a>.
+</p>
+<h2>
+	První test
+</h2>
+<p>
+	Knihovnu použijeme velmi jednoduše. Stačí náš test podědit od třídy \Arron\TestIt\TestCase. Ta má jednu abstraktní metodu, createTestObject(). Tato
+	metoda se má starat o vytvoření a
+	vrácení nové hotové instance objektu, který se chystáme testovat. O zbytek (uložení tohoto objektu a podobně) se již nemusíme starat. Pro každý
+	test bude vytvořena nová instance.
+</p>
+<h2>
+	Pojmenované závislosti
+</h2>
+<p>
+	Každá závislost musí být v testu pojmenovaná (mít alias chcete-li). Má to dvě zásadní výhody. První, můžeme se na danou závislost jednoduše odkázat. Druhá, můžeme
+	definovat dvě závislosti stejného typu, ale s jiným
+	jménem (například dvě připojení do databáze). Pojďme si ukázat přiklad. Mějme jednoduchou třídu, která slouží jako model pro načítání dat (v tomto případě jednoduché načítání obsahu z
+	nějakého úložiště):
+</p>
+<pre>
+class ContentModel
+{
+	/** @var IContentStorage */
+	protected $storage;
+
+	public function __construct(IContentStorage $contentStorage)
+	{
+		$this->storage = $contentStorage;
+	}
+
+	public function save($id, $content)
+	{
+		return $this->storage->save($id, $content);
+	}
+
+	public function load($id)
+	{
+		try {
+			$content = $this->storage->load($id);
+		} catch (ContentNotFoundException $e) {
+			$content = 'There is no content yet.';
+		}
+		return $content;
+	}
+
+	public function delete($id)
+	{
+		$this->storage->delete($id);
+	}
+}
+
+interface IContentStorage
+{
+	public function save($id, $content);
+
+	public function load($id);
+
+	public function delete($id);
+}
+</pre>
+<p>
+	Pokud budeme chtít napsat test pro tuto třídu, nejdříve si vytvoříme jednoduchou kostru (já osobně jí mám nadefinovanou jako šablonu ve svém IDE,
+	testy se pak vytváří opravdu rychle):
+</p>
+<pre>
+class ContentModelTest extends \Arron\TestIt\TestCase
+{
+
+	/**
+	 * @return object
+	 */
+	protected function createTestObject()
+	{
+		return new ContentModel($this->getMockedClass('\Arron\Examples\IContentStorage', 'storage'));
+	}
+}
+</pre>
+<p>
+	Metoda getMockedClass() vytvoří a vrátí mock daného typu s definovaným jménem. Používá k tomu běžné prostředky PHPUnitu, takže je možné vytvářet
+	mocky z rozhranní, abstraktních tříd a podobně.
+</p>
+<h2>
+	Testujeme
+</h2>
+<p>
+	Ukažme si, jak vypadá jednoduchý test například pro metodu save:
+</p>
+<pre>
+public function testSave()
+{
+	$id = 'idForTest';
+	$content = 'content for testing';
+
+	$this->expectDependencyCall('storage', 'save', array($id, $content));
+
+	$this->getTestObject()->save($id, $content);
+}
+</pre>
+<p>
+	Jak vidíte, test je opravdu velmi jednoduchý a přímočarý. Klíčovou metodou je zde expectDependencyCall(). Na rozdíl od běžné PHPUnit konstrukce pro
+	psaní expectů shrnuje vše potřebné do jednoho volání.
+	Prvním parametrem je název závislosti, druhým parametrem je název metody, kterou očekáváme, že se na dané závislosti zavolá. Následuje výčet očekávaných
+	parametrů (v poli) a návratová hodnota, kterou chceme, aby závislost vrátila. V testu pak voláme testovanou metodu. Při tom využíváme metodu getTestObject(),
+	která vrátí instanci testovaného objektu. Dále se o nic nemusíme starat, TestIt provede veškeré
+	kontroly za nás a v případě, že některé předpoklady nevyhovují, tak test selže.
+</p>
+<p>
+	Pořadí volání expectDependencyCall zároveň určuje pořadí, ve kterém očekáváme, že budou závislosti volány. TestIt toto hlídá a pokud se zavolá jakákoliv závislost
+	mimo očekávané pořadí, test okamžitě selže. Toto chování je velmi důležité, protože pořádí volání závislostí může být kritické.
+	Například pokud bychom někam odesílali šifrovaná data, tak je velký rozdíl, pokud data nejdříve zašifrujeme a pak odešleme a nebo nejdříve odešleme
+	a pak teprve zašifrujeme. Unit test by v každém případě měl být schopný tyto dva případy rozlišit a případně spadnout.
+</p>
+<p>
+	Pokud bychom nechtěli kontrolovat předávané parametry (ať už z jakéhokoliv důvodu), stačí metodě expectDependencyCall() místo seznamu očekávaných
+	parametrů předat hodnotu null. Test pak projde při zavolání závislosti s jakýmikoliv parametry.
+</p>
+<h2>
+	Testování vyjímek
+</h2>
+<p>
+	Často se stane, že potřebujeme otestovat, co se stane, když nějaké volání závislosti vyhodí vyjímku. Například v metodě load v předchozím příkladu
+	modelu. TestIt si i s tímto případem dokáže
+	jednoduše poradit. Pokud metodě expectDependencyCall() předáme jako návratovou hodnotu instanci třídy \Exception (či jakéhokoliv jejího potomka),
+	potom zavolání příslušné závislosti danou instanci nevrátí, ale tuto instanci vyhodí jako vyjímku. V testu to vypadá takto:
+</p>
+<pre>
+public function testLoadNotFound()
+{
+	$id = 'idForTest';
+	$expectedResult = 'There is no content yet.';
+
+	$this->expectDependencyCall('storage', 'load', array($id), new ContentNotFoundException()); //volání $this->storage->load($id) v metodě load() vyhodí vyjímku
+
+	$returnedResult = $this->getTestObject()->load($id);
+
+	$this->assertEquals($expectedResult, $returnedResult);
+}
+</pre>
+<h2>
+	Mockování globálních funkcí
+</h2>
+<p>
+	Nejenom v převzatém kódu, ale i v kódu, který si sami napíšeme, často používáme nativní PHP funkce. U některých není jejich volání v testu problém,
+	ale například funkce pro práci se systémem
+	souborů nebo funkce pro připojování ke vzdáleným prostředkům bychom v unit testech nejraději nevolali. Ale i části aplikace, které s těmito
+	funkcemi přímo pracují (čili nejnižší vrstva aplikace,
+	pokud máme tyto části správně zapouzdředné) by měly mít své unit testy.
+</p>
+<p>
+	TestIt nabízí poměrně jednoduchý systém, jak i tyto funkce mockovat. Využívá přitom „fintu“ se jmennými prostory. Pokud jmenné prostory používáme a
+	zavoláme v některém nedefinovanou funkci tak ta
+	nakonec „probublá“ až do globálního prostoru a zavolá se globální PHP funkce. Pokud ale v nějakém jmenném prostoru funkci nadefinujeme, tak se
+	zavolá ona nadefinovaná (nikoliv globální PHP
+	funkce). Vyplývá z toho jedno zásadní omezení tohoto řešení. Funkce volané s plným názvem jmenného prostoru nepůjdou namockovat:
+</p>
+<pre>
+namespace SomeNamespace;
+	$timestamp = time();//funkce time může být namockována
+
+	$timestamp = \time();//funkce time NEmůže být namockována
+</pre>
+<p>
+	V praxi to funguje takto. Mějme třídu, která je fyzickým úložištěm pro předchozí příklad a data ukládá do souborů:
+</p>
+<pre>
+class ContentFileStorage implements IContentStorage
+{
+	//třída je zkrácena!
+
+	protected $directory;
+
+	public function save($id, $content)
+	{
+		$file = $this->getFilePath($id);
+		$success = file_put_contents('safe://' . $file, $content);
+		if ($success === FALSE) {
+			throw new ContentIOException('Can not write content into file ' . $file);
+		}
+	}
+
+	public function load($id)
+	{
+		$file = $this->getFilePath($id);
+		if (file_exists($file)) {
+			$content = file_get_contents('safe://' . $file);
+			if ($content === FALSE) {
+				throw new ContentIOException('Can not read content from file ' . $file);
+			}
+			return $content;
+		}
+		throw new ContentNotFoundException('There is no such content as ' . $file);
+	}
+
+	public function delete($id)
+	{
+		$fileName = $this->getFilePath($id);
+		if (file_exists($fileName)) {
+			if (!unlink($fileName)) {
+				throw new ContentIOException('Can not delete file ' . $fileName);
+			}
+		}
+	}
+}
+</pre>
+<p>
+	Unit test metody load by pak vypadal takto:
+</p>
+<pre>
+class ContentFileStorageTest extends \Arron\TestIt\TestCase
+{
+
+	protected function setUp()
+	{
+		$this->mockGlobalFunction('file_exists');
+		$this->mockGlobalFunction('file_get_contents');
+		parent::setUp();
+	}
+
+
+	/**
+	 * @return object
+	 */
+	protected function createTestObject()
+	{
+		return new ContentFileStorage('testDir');
+	}
+
+	public function testLoad()
+	{
+		$id = 'testId';
+		$expectedContent = 'some test content';
+
+		$this->expectDependencyCall('global', 'file_exists', array('testDir/content/testId.content'), TRUE);
+		$this->expectDependencyCall('global', 'file_get_contents', array('safe://testDir/content/testId.content'), $expectedContent);
+
+		$returnedResult = $this->getTestObject()->load($id);
+
+		$this->assertEquals($expectedContent, $returnedResult);
+	}
+
+	public function testLoadFileNotFound()
+	{
+		$id = 'testId';
+
+		$this->expectDependencyCall('global', 'file_exists', array('testDir/content/testId.content'), FALSE);
+
+		$this->setExpectedException('\Arron\Examples\ContentNotFoundException');
+
+		$this->getTestObject()->load($id);
+	}
+
+	public function testLoadFileReadError()
+	{
+		$id = 'testId';
+
+		$this->expectDependencyCall('global', 'file_exists', array('testDir/content/testId.content'), TRUE);
+		$this->expectDependencyCall('global', 'file_get_contents', array('safe://testDir/content/testId.content'), FALSE);
+
+		$this->setExpectedException('\Arron\Examples\ContentIOException');
+
+		$this->getTestObject()->load($id);
+	}
+}
+</pre>
+<p>
+	Volání metody mockGlobalFunction vytvoří mock předané funkce v daném jmenném prostoru. Metodu je potřeba zavolat kdykoliv před prvním voláním
+	mockované funkce. Metoda setUp je tím nejlepším	místem, kde mít tyto mocky všechny pohromadě pro daný test case.
+	Metodu mockGlobalFunction můžete volat i vícekrát se stejným názvem funkce, TestIt si ohlídá, aby nedefinoval jednu funkci vícekrát.
+</p>
+<p>
+	Je potřeba si uvědomit, že jakmile je nějaká funkce definovaná v určitém jmenném prostoru, tak zůstane definovaná po celou dobu běhu testů. Proto
+	je potřeba do testů psát expecty na všechny její
+	volání. To je cena za možnost testovat i globální PHP funkce.
+</p>
+<p>
+	Problém nastává u funkcí, které používají výstupní parametr (například funkce preg_*). Nepodařilo se mi přijít na způsob, kterým by se dalo v testu jednoduše
+	definovat, co má funkce vrátit jako svojí návratovou hodnotu a co má vrátit v kterém výstupním parametru. Uvítám jakékoliv nápady na řešení.
+</p>
+<h2>
+	Přístup k chráněným atributům a metodám testované třídy
+</h2>
+<p>
+	Někteří to budou považovat za "prasárnu", ale při psaní unit testů se často hodí mít přístup k chráněným atributům a metodám testovaného objektu.
+	Nechám na každém, jestli v testech někdy takové věci využívá nebo ne, v každém případě TestIt nabízí pro tyto případy několik pomocných metod:
+</p>
+<pre>
+protected function setPropertyInTestSubject($name, $value)
+protected function getPropertyFromTestSubject($name) //dobře se používá na asserty abychom zjistili, zda se objekt po volání testované metody nachází v očekávaném stavu
+protected function callTestSubjectMethod($name, array $arguments = array())
+</pre>
+<h2>
+	Shrnutí
+</h2>
+<p>
+	Knihovna TestIt je nadstavbou pro PHPUnit a umožňuje jednoduše mockovat třídy, globální PHP funkce a zkracuje zápis expectů. Umožňuje mockovat
+	stejné střídy pod jinými názvy závislostí. Je
+	restriktivní, co se neočekávaných volání závislostí týká, a ulehčuje testování selhání volání závislostí.
+</p>
+<p>
+	Kompletní příklady si můžete prohlédnout na <a href="https://github.com/arron0/testit/tree/master/examples">GitHubu</a>.
+</p>
+<p>
+	Knihovna je šířena pod licencí <a href="http://opensource.org/licenses/MIT">MIT</a>.
+</p>
+</body>
+</html>

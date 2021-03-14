@@ -1,0 +1,586 @@
+/*body, html {
+	margin: 0;
+	padding: 0
+}
+
+body {
+	line-height: 1.5;
+	background: white;
+	color: black;
+	position: relative;
+	font-size: 13px
+}*/
+
+ol, ul, menu {
+	margin: .8em 0 1.75em 1.75em;
+	padding: 0
+}
+
+li {
+	margin: .1em 0 .1em 1.75em;
+	padding: 0
+}
+
+form {
+	margin: 0;
+	padding: 0
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 0
+}
+
+caption, th, td {
+	text-align: left
+}
+
+input, select {
+	vertical-align: middle
+}
+
+input, select, textarea {
+	font-size: 100%
+}
+
+input.button {
+	width: 0;
+	overflow: visible
+}
+
+input.button[class] {
+	width: auto
+}
+
+img {
+	vertical-align: middle;
+	border: 0
+}
+
+pre {
+	overflow: auto;
+= padding-bottom : 2 em
+}
+
+* html pre {
+	overflow-y: visible
+}
+
+hr {
+	height: 0;
+	border: 0;
+	border-top: 1px solid black
+}
+
+i, em {
+	margin-right: .1em
+}
+
+sub, sup {
+	vertical-align: baseline;
+	position: relative
+}
+
+sub {
+	top: .4em
+}
+
+sup {
+	bottom: .4em
+}
+
+a {
+	cursor: hand
+}
+
+abbr, acronym {
+	cursor: help;
+	border-bottom: 1px dotted #000
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: ""
+}
+
+blockquote, q {
+	quotes: "" ""
+}
+
+q {
+	font-style: italic
+}
+
+h1+p, h2+p, h3+p, h4+p {
+	text-indent: 0
+}
+
+p {
+	margin: .8em 0 1em;
+	padding: 0;
+	text-indent: .8em
+}
+
+p code, li code, dl code {
+	white-space: nowrap
+}
+
+h1, h2, h3, h4 {
+	text-indent: 0;
+	margin: 1em 0 .6em
+}
+
+.hidden, .print, .js {
+	display: none
+}
+
+.blind {
+	position: absolute;
+	top: -1000px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden
+}
+
+.clear {
+	clear: both
+}
+
+.default {
+	font-weight: bold
+}
+
+.about {
+	border-bottom: 1px dotted gray
+}
+
+.number {
+	text-align: right;
+	white-space: nowrap
+}
+
+.wide {
+	width: 100%
+}
+
+.error, .alert, .required {
+	color: red;
+	font-weight: bold
+}
+
+.notice {
+	color: yellow
+}
+
+.success {
+	color: green
+}
+
+.left {
+	text-align: left !important
+}
+
+.center {
+	text-align: center !important
+}
+
+.right {
+	text-align: right !important
+}
+
+img.left, .figure-left {
+	float: left;
+	margin: 5px 10px 5px 0
+}
+
+img.right, .figure-right {
+	float: right;
+	margin: 5px 0 5px 10px
+}
+
+.noindent {
+	text-indent: 0 !important
+}
+
+.nowrap {
+	white-space: nowrap !important
+}
+
+.nodots {
+	list-style: none !important
+}
+
+.noborder {
+	border: none !important
+}
+
+a[href^="error:"] {
+	background: red;
+	color: white;
+	text-decoration: blink
+}
+
+.php-keyword1 {
+	color: #d24;
+	font-weight: bold
+}
+
+.php-keyword2 {
+	color: #d24
+}
+
+.php-var {
+	color: #ca8a04;
+	font-weight: bold
+}
+
+.php-num {
+	color: red
+}
+
+.php-quote {
+	color: #080
+}
+
+.php-vquote {
+	color: #0F0;
+	font-weight: bold
+}
+
+.php-comment {
+	color: #999
+}
+
+.html-tag {
+	color: #598527;
+	font-weight: bold
+}
+
+.html-tagin {
+	color: #89a315
+}
+
+.html-quote {
+	color: #448ccb;
+	font-weight: bold
+}
+
+.html-comment {
+	color: #999
+}
+
+.html-entity {
+	color: #89a315
+}
+
+.css-class {
+	color: #004a80
+}
+
+.css-id {
+	color: #7da7d9;
+	font-weight: bold
+}
+
+.css-def {
+	color: #5674b9
+}
+
+.css-property {
+	color: #003663;
+	font-weight: bold
+}
+
+.css-value {
+	color: #448ccb
+}
+
+.css-color {
+	color: #080
+}
+
+.css-comment {
+	color: #999
+}
+
+.cpp-keywords1 {
+	color: blue;
+	font-weight: bold
+}
+
+.cpp-num {
+	color: red
+}
+
+.cpp-quote {
+	color: brown;
+	font-weight: bold
+}
+
+.cpp-comment {
+	color: green
+}
+
+.cpp-preproc {
+	color: grey
+}
+
+.java-keywords1 {
+	color: blue;
+	font-weight: bold
+}
+
+.java-num {
+	color: red
+}
+
+.java-quote {
+	color: brown;
+	font-weight: bold
+}
+
+.java-comment {
+	color: #999
+}
+
+.java-preproc {
+	color: grey
+}
+
+.js-out {
+	color: #898993
+}
+
+.js-keywords1 {
+	color: #575757;
+	font-weight: bold
+}
+
+.js-num {
+	color: #575757
+}
+
+.js-quote {
+	color: #575757;
+	font-weight: bold
+}
+
+.js-comment {
+	color: #999
+}
+
+.sql-keyword1 {
+	color: #d00;
+	font-weight: bold
+}
+
+.sql-keyword2 {
+	color: #d22
+}
+
+.sql-keyword3 {
+	color: #00f;
+	font-weight: bold
+}
+
+.sql-value {
+	color: #5674b9
+}
+
+.sql-comment {
+	color: #999
+}
+
+.sql-num {
+	color: #5674b9;
+	font-weight: bold
+}
+
+.sql-option {
+	color: #004a80;
+	font-weight: bold
+}
+
+.py-keyword1 {
+	color: #03c;
+	font-weight: bold
+}
+
+.py-keyword2 {
+	color: #ce3333;
+	font-weight: bold
+}
+
+.py-keyword3 {
+	color: #606;
+	font-weight: bold
+}
+
+.py-number {
+	color: #930
+}
+
+.py-docstring {
+	color: #e86a18
+}
+
+.py-quote {
+	color: #878787;
+	font-weight: bold
+}
+
+.py-comment {
+	color: #999;
+	font-style: italic
+}
+
+.texy-hlead {
+	color: #44B;
+	font-weight: bold
+}
+
+.texy-hbody {
+	background-color: #eeF;
+	color: #44B
+}
+
+.texy-hr {
+	color: #B44
+}
+
+.texy-code {
+	color: #666
+}
+
+.texy-html {
+	color: #6a6
+}
+
+.texy-text {
+	color: #66a
+}
+
+.texy-err {
+	background-color: red;
+	color: white
+}
+
+.xlang {
+	color: red;
+	font-weight: bold
+}
+
+.count {
+	color: black;
+	background-color: #FFF
+}
+
+/*body, input, select, textarea {
+	font-family: Verdana, "Geneva CE", lucida, sans-serif
+}*/
+
+/*h1, h2, h3, h4, .perex, #download {
+	font-family: Trebuchet MS, "Geneva CE", lucida, sans-serif
+}*/
+
+body {
+	line-height: 1.65;
+	color: #444;
+	margin: 10px;
+	padding: 0
+}
+
+pre {
+	line-height: 1.4
+}
+
+html {
+	height: 100%
+}
+
+p {
+	margin: 1em 0;
+	padding: 0
+}
+
+h1, h2, h3, h4 {
+	color: #1e5eb6
+}
+
+h1 {
+	font-size: 185%;
+	font-weight: normal;
+	margin: .2em 0
+}
+
+h2 {
+	font-size: 150%;
+	font-weight: normal
+}
+
+h3 {
+	font-size: 120%;
+	color: black
+}
+
+h1 small {
+	color: gray;
+	margin-left: 10px
+}
+
+div#main_content_wrap, pre {
+	font-weight: normal;
+	line-height: 1.4;
+	overflow: auto;
+	width: 98%
+}
+
+form {
+	display: inline
+}
+
+textarea {
+	float: left;
+	width: 49%;
+	height: 95%;
+	background: #f2f2f2;
+	border: 1px solid gray;
+	padding: 3px
+}
+
+pre {
+	background: #f8f8f8
+}
+
+#help {
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	margin: 0;
+	font-size: 185%;
+	color: #1e5eb6;
+	border-bottom: 1px dotted black;
+	line-height: 1
+}
+
+div.htmltooltip {
+	position: absolute;
+	z-index: 1000;
+	left: -1000px;
+	top: -1000px;
+	background: #272727;
+	border: 10px solid black;
+	color: white;
+	padding: 3px;
+	width: 250px;
+	font-size: 80%
+}
+
+div.htmltooltip ul {
+	margin: 0;
+	padding: 0
+}
+
+div.figure p {
+	text-align: center;
+	font-style: italic
+}
