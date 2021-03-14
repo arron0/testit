@@ -1,12 +1,5 @@
 <?php
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package Arron
- * @subpackage TestIt
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license http://opensource.org/licenses/MIT MIT
- */
+
 namespace Arron\TestIt\Tools;
 
 /**
@@ -19,7 +12,7 @@ namespace Arron\TestIt\Tools;
  */
 class ResultProvider
 {
-	/** @var array */
+	/** @var mixed[] */
 	public static $preparedResult = array();
 
 	/**

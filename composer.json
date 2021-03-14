@@ -10,16 +10,14 @@
 	],
 	"license": "MIT",
 	"require": {
-		"php": ">=7.0",
-		"phpunit/phpunit": ">=6.5 <8.0.0"
+		"php": ">=7.1",
+		"phpunit/phpunit": ">=7.2 <8.0.0"
 	},
 	"require-dev": {
-		"phing/phing": "*",
-		"pdepend/pdepend": "*",
-		"phploc/phploc": "*",
-		"phpmd/phpmd" : "*",
 		"sebastian/phpcpd": "*",
-		"arron/cli-texy-converter": "1.0.2"
+		"arron/cli-texy-converter": "1.0.2",
+		"squizlabs/php_codesniffer": "*",
+		"phpstan/phpstan": "*"
 	},
 	"minimum-stability": "dev",
 	"autoload": {
@@ -27,7 +25,10 @@
 	},
 	"bin": ["TestIt/bin/debugphpscript"],
 	"scripts": {
-		"tests-unit": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
+		"phpcs": "phpcs --standard=phpcs.xml TestIt",
+		"phpcsfix": "phpcbf --standard=phpcs.xml TestIt",
+		"phpstan": "phpstan analyse -c phpstan.neon",
+		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},
 	"authors": [
 		{
