@@ -13,7 +13,6 @@ Code sniffer:
     key: $CI_COMMIT_SHORT_SHA
     paths:
       - vendor
-  allow_failure: true
 
 PhpStan:
   stage: static analysis
@@ -25,7 +24,6 @@ PhpStan:
     key: $CI_COMMIT_SHORT_SHA
     paths:
       - vendor
-  allow_failure: true
 
 Unit Tests PHP 7.1:
   stage: test
