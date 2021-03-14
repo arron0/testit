@@ -31,8 +31,8 @@ phpstan:
 unit-tests:
 	make composer cmd="unit-tests"
 
-ls:
-	docker run --rm --interactive --tty \
-          --network="host" \
-          --volume $(PWD):/usr/src \
-          arron/testit-dev composer install
+check:
+	make phpcs
+	make phpstan
+	make unit-tests
+
