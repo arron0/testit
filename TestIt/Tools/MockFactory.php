@@ -167,10 +167,10 @@ class MockFactory
 	 */
 	public function getNewMock($mockName, $className)
 	{
-		if(!class_exists($className)) {
-			throw new ReflectionException('Class ' . $className . ' does not exists.');
+		if(class_exists($className) || interface_exists($className)) {
+			return $this->mockClass($mockName, $className);
 		}
-		return $this->mockClass($mockName, $className);
+		throw new ReflectionException('Class ' . $className . ' does not exists.');
 	}
 
 	/**
