@@ -10,8 +10,8 @@
 	],
 	"license": "MIT",
 	"require": {
-		"php": ">=7.0",
-		"phpunit/phpunit": ">=6.5 <8.0.0"
+		"php": ">=7.1",
+		"phpunit/phpunit": ">=7.2 <8.0.0"
 	},
 	"require-dev": {
 		"sebastian/phpcpd": "*",
