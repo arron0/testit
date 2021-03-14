@@ -5,6 +5,10 @@ namespace Arron\TestIt\Tools;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionFunction;
+use ReflectionParameter;
 
 /**
  * MockFactory class definition
@@ -21,14 +25,14 @@ class MockFactory
 	 */
 	private static $instance = null;
 
-	/** @var array */
+	/** @var MockObject[] */
 	private $mockClasses = array();
 
-	/** @var array */
+	/** @var int[] */
 	private $mockedGlobalFunctions = array();
 
 	/**
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	private $methodsParameters = array();
 
@@ -49,7 +53,7 @@ class MockFactory
 	 */
 	public static function getInstance()
 	{
-		if (is_null(self::$instance)) {
+		if (self::$instance === null) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -60,7 +64,7 @@ class MockFactory
 	 */
 	protected function getMockGenerator()
 	{
-		if (is_null($this->mockObjectGenerator)) {
+		if ($this->mockObjectGenerator === null) {
 			$this->mockObjectGenerator = new MockGenerator();
 		}
 		return $this->mockObjectGenerator;
@@ -81,7 +85,7 @@ class MockFactory
 	/**
 	 * @param string $identificator
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public function getMethodParameters($identificator)
 	{
@@ -95,7 +99,7 @@ class MockFactory
 	/**
 	 * @param string $mockName
 	 *
-	 * @return \PHPUnit_Framework_MockObject_MockObject|null
+	 * @return MockObject|null
 	 */
 	protected function getMockedClass($mockName)
 	{
@@ -107,7 +111,7 @@ class MockFactory
 
 	/**
 	 * @param string $mockName
-	 * @param \PHPUnit_Framework_MockObject_MockObject $mock
+	 * @param MockObject $mock
 	 *
 	 * @return void
 	 */
@@ -117,7 +121,9 @@ class MockFactory
 	}
 
 	/**
-	 * @param string $mockedGlobalFunctionName
+	 * @param string $identificator
+	 *
+	 * @return void
 	 */
 	public function addMockedGlobalFunction($identificator)
 	{
@@ -125,7 +131,7 @@ class MockFactory
 	}
 
 	/**
-	 * @param $identificator
+	 * @param string $identificator
 	 *
 	 * @return bool
 	 */
@@ -141,7 +147,7 @@ class MockFactory
 	 * @param string $mockName
 	 * @param string $className
 	 *
-	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 * @return MockObject
 	 */
 	public function getMock($mockName, $className)
 	{
@@ -157,22 +163,25 @@ class MockFactory
 	 * @param string $mockName
 	 * @param string $className
 	 *
-	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 * @return MockObject
 	 */
 	public function getNewMock($mockName, $className)
 	{
+		if(!class_exists($className)) {
+			throw new ReflectionException('Class ' . $className . ' does not exists.');
+		}
 		return $this->mockClass($mockName, $className);
 	}
 
 	/**
 	 * @param string $mockName
-	 * @param string $className
+	 * @param class-string $className
 	 *
-	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 * @return MockObject
 	 */
 	protected function mockClass($mockName, $className)
 	{
-		$reflection = new \ReflectionClass($className);
+		$reflection = new ReflectionClass($className);
 		$mock = $this->getMockGenerator()->getMock($className, array(), array(), $mockName, false, false, true, false);
 
 		$publicMethods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -200,7 +209,7 @@ class MockFactory
 	 * Than it can be determined if the named argument has default value or if it is required
 	 *
 	 * @param string $identificator
-	 * @param array $parameters Methods parameters as array of their reflections
+	 * @param ReflectionParameter[] $parameters Methods parameters as array of their reflections
 	 *
 	 * @return void
 	 */
@@ -219,6 +228,13 @@ class MockFactory
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $namespace
+	 *
+	 * @return void
+	 * @throws ReflectionException
+	 */
 	public function createMockOfGlobalFunctionInNamespace($name, $namespace)
 	{
 		$namespace = trim($namespace, '\\');
@@ -227,7 +243,7 @@ class MockFactory
 			return;
 		}
 		$mockIdentificator = 'global-' . $name;
-		$functionReflection = new \ReflectionFunction($name);
+		$functionReflection = new ReflectionFunction($name);
 		$functionMockCode = $this->generateCodeForGlobalFunctionMock($name, $namespace, $functionReflection);
 
 		eval($functionMockCode);
@@ -235,6 +251,12 @@ class MockFactory
 		$this->saveMethodParameters($mockIdentificator, $functionReflection->getParameters());
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $namespace
+	 * @param ReflectionFunction $reflectionObject
+	 * @return string
+	 */
 	protected function generateCodeForGlobalFunctionMock($name, $namespace, $reflectionObject)
 	{
 		$arguments = $this->getMockGenerator()->getFunctionParameters($reflectionObject);

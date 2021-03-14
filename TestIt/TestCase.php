@@ -2,6 +2,8 @@
 
 namespace Arron\TestIt;
 
+use ReflectionClass;
+
 /**
  * TestCase class definition
  *
@@ -23,6 +25,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @inheritdoc
+	 *
+	 * @return void
 	 */
 	protected function setUp()
 	{
@@ -38,6 +42,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	abstract protected function createTestObject();
 
+	/**
+	 * @return void
+	 */
 	protected function initializationExpectations()
 	{
 		//intentionally empty, prepared to be overwritten
@@ -51,9 +58,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $this->testObject;
 	}
 
+	/**
+	 * @param object $object
+	 *
+	 * @return void
+	 */
 	protected function setTestObject($object)
 	{
-		if (is_null($this->testObject)) {
+		if ($this->testObject === null) {
 			$this->testObject = $object;
 			return;
 		}
@@ -88,7 +100,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	private function getMockFactory()
 	{
-		if (is_null($this->mockFactory)) {
+		if ($this->mockFactory === null) {
 			$this->mockFactory = $this->createMockFactory();
 		}
 		return $this->mockFactory;
@@ -105,7 +117,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param string $dependencyName
 	 * @param string $methodName
-	 * @param array|null $methodArguments null if you want to skip check
+	 * @param mixed[]|null $methodArguments null if you want to skip check
 	 * @param mixed|\Exception $returnValue If instance of Exception it will be thrown
 	 *
 	 * @return void
@@ -118,7 +130,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 * @param mixed $expectedResult
 	 *
 	 * @return void
@@ -162,11 +174,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return mixed
 	 * @throws \InvalidArgumentException
-	 *
 	 */
 	protected function callTestSubjectMethod($name, array $arguments = array())
 	{
@@ -180,7 +191,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return \ReflectionClass
+	 * @return ReflectionClass<object>
 	 */
 	protected function getTestSubjectReflection()
 	{
@@ -188,13 +199,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param object|string $argument
+	 * @param object|class-string $argument
 	 *
-	 * @return \ReflectionClass
+	 * @return ReflectionClass<object>
 	 */
 	protected function getReflection($argument)
 	{
-		return new \ReflectionClass($argument);
+		return new ReflectionClass($argument);
 	}
 
 	/**
@@ -250,7 +261,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	private function getUncalledDependencies()
 	{

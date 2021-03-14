@@ -15,17 +15,17 @@ use PHPUnit\Framework\Assert;
 class FunctionsCallLogger
 {
 	/**
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	private static $loggedCalls = array();
 
 	/**
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	private static $expectedCalls = array();
 
 	/**
-	 * @var array
+	 * @var string[]
 	 */
 	private static $passedFunctions = array();
 
@@ -39,7 +39,7 @@ class FunctionsCallLogger
 	 */
 	protected static function getMockFactory()
 	{
-		if (is_null(self::$mockFactory)) {
+		if (self::$mockFactory === null) {
 			self::$mockFactory = MockFactory::getInstance();
 		}
 		return self::$mockFactory;
@@ -48,7 +48,7 @@ class FunctionsCallLogger
 	/**
 	 * @param string $identificator
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected static function getFunctionArguments($identificator)
 	{
@@ -57,7 +57,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return mixed
 	 */
@@ -68,7 +68,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public static function getLoggedFunctions()
 	{
@@ -79,7 +79,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return array
+	 * @return mixed[]
 	 */
 	public static function getLoggedArgumets()
 	{
@@ -90,7 +90,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return array
+	 * @return mixed[]
 	 */
 	public static function getExpectedFunctionArguments()
 	{
@@ -101,7 +101,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public static function getExpectedFunctions()
 	{
@@ -113,7 +113,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return mixed
 	 */
@@ -126,7 +126,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 */
@@ -147,7 +147,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 */
@@ -158,7 +158,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 *
@@ -172,7 +172,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 *
@@ -198,7 +198,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 */
@@ -223,9 +223,9 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $functionName
-	 * @param array $functionArtuments
+	 * @param mixed[] $functionArtuments
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
 	protected static function fillDefaultArguments($functionName, array $functionArtuments)
 	{
@@ -256,7 +256,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	protected static function getNextExpectedFunction()
 	{
@@ -271,7 +271,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @return array|null
+	 * @return mixed[]|null
 	 */
 	protected static function getNextExpectedArguments()
 	{
@@ -287,7 +287,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $functionName
-	 * @param array $functionArguments
+	 * @param mixed[] $functionArguments
 	 * @param mixed $expectedResult
 	 *
 	 * @return void
@@ -300,7 +300,7 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 */
@@ -321,7 +321,7 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 *
 	 * @return void
 	 */
