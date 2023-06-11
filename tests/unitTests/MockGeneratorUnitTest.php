@@ -10,6 +10,7 @@
 namespace Arron\TestIt\Tests;
 
 use Arron\TestIt\Tools\MockGenerator;
+use PHPUnit\Framework\MockObject\Generator;
 
 /**
  * MockGeneratorUnitTest class definition
@@ -27,7 +28,7 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 	 */
 	protected function createTestObject()
 	{
-		return new MockGenerator();
+		return new MockGenerator(new Generator());
 	}
 
 	/**
@@ -43,7 +44,7 @@ class MockGeneratorUnitTest extends \Arron\TestIt\TestCase
 		$this->assertEquals($expectedResult, $returnedResult);
 	}
 
-	public function getMethodParametersWithFunctionsDataProvider()
+	public static function getMethodParametersWithFunctionsDataProvider()
 	{
 		return array(
 				array('strlen', '$str'),

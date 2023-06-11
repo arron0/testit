@@ -16,8 +16,15 @@ use ReflectionMethod;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-class MockGenerator extends Generator
+class MockGenerator
 {
+	private Generator $generator;
+
+	public function __construct(Generator $generator)
+	{
+		$this->generator = $generator;
+	}
+
 	/**
 	 * Returns the parameters of a function or method.
 	 *
@@ -48,7 +55,7 @@ class MockGenerator extends Generator
 			if (!$forCall) {
 				if ($parameter->isArray()) {
 					$typeHint = 'array ';
-				} elseif (version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable()) {
+				} elseif ($parameter->isCallable()) {
 					$typeHint = 'callable ';
 				} else {
 					try {
@@ -89,5 +96,10 @@ class MockGenerator extends Generator
 		}
 
 		return join(', ', $parameters);
+	}
+
+	public function __call($name, $arguments)
+	{
+		return call_user_func_array([$this->generator, $name], $arguments);
 	}
 }

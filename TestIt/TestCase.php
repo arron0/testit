@@ -2,6 +2,7 @@
 
 namespace Arron\TestIt;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
 /**
@@ -28,7 +29,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 *
 	 * @return void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 		$this->resetFunctionLog();
@@ -88,7 +89,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string $className
 	 * @param string $mockName
 	 *
-	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 * @return MockObject
 	 */
 	protected function getMockedClass($className, $mockName)
 	{
@@ -234,7 +235,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 *
 	 * @return void
 	 */
-	protected function assertPostConditions()
+	protected function assertPostConditions(): void
 	{
 		parent::assertPostConditions();
 		$this->assertUncalledDependencies();

@@ -31,7 +31,7 @@ class TestItTest extends \Arron\TestIt\TestCase
 	/*
 	 * Specific behaviour for testExpectingMoreCallsThanCalled that should fail.
 	 */
-	protected function onNotSuccessfulTest(Throwable $e)
+	protected function onNotSuccessfulTest(Throwable $e): void
 	{
 		if (($this->getName() != "testExpectingMoreCallsThanCalled") && ($e->getMessage() != "'dependency2::doSomething' expected to be called but wasn't/weren't.")) {
 			throw $e;

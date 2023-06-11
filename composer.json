@@ -10,13 +10,13 @@
 	],
 	"license": "MIT",
 	"require": {
-		"php": ">=7.1",
-		"phpunit/phpunit": ">=7.2 <8.0.0"
+		"php": ">=7.4",
+		"phpunit/phpunit": "~9.0"
 	},
 	"require-dev": {
 		"sebastian/phpcpd": "*",
 		"arron/cli-texy-converter": "1.0.2",
-		"squizlabs/php_codesniffer": "*",
+		"squizlabs/php_codesniffer": "~4.0",
 		"phpstan/phpstan": "*"
 	},
 	"minimum-stability": "dev",
