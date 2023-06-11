@@ -9,7 +9,8 @@ RUN apt-get install -y \
 		git \
 		libzip-dev \
 		zlib1g-dev \
-        zip
+        zip \
+        mc
 
 RUN pecl install xdebug-2.9.5 \
 	&& echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
@@ -17,10 +18,13 @@ RUN pecl install xdebug-2.9.5 \
 	&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+# Copy PHP config
+COPY docker/etc/php $PHP_INI_DIR/conf.d
 
-RUN curl -sS https://getcomposer.org/installer | tee composer-setup.php \
-	&& php composer-setup.php --1 --install-dir=/usr/local/bin --filename=composer \
-	&& rm composer-setup.php
+RUN mkdir -p -m 0777 /var/www/html/temp \
+    && mkdir -p -m 0777 /var/www/html/log
 
-WORKDIR /usr/src
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
