@@ -9,7 +9,9 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 /**
+ * phpcs:disable
  * @method getMock(string $type, $methods = [], array $arguments = [], string $mockClassName = '', bool $callOriginalConstructor = true, bool $callOriginalClone = true, bool $callAutoload = true, bool $cloneArguments = true, bool $callOriginalMethods = false, object $proxyTarget = null, bool $allowMockingUnknownTypes = true, bool $returnValueGeneration = true)
+ * phpcs:enable
  */
 class MockGenerator
 {
@@ -100,7 +102,7 @@ class MockGenerator
 	public function __call(string $name, array $arguments)
 	{
 		$callback = [$this->generator, $name];
-		if(is_callable($callback)) {
+		if (is_callable($callback)) {
 			return call_user_func_array($callback, $arguments);
 		}
 
