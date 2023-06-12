@@ -21,9 +21,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/** @var \Arron\TestIt\Tools\MockFactory */
 	private $mockFactory;
 
-	/** @var bool */
-	private $setupCheck;
-
 	/**
 	 * @inheritdoc
 	 *
@@ -35,7 +32,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$this->resetFunctionLog();
 		$this->initializationExpectations();
 		$this->testObject = $this->createTestObject();
-		$this->setupCheck = true;
 	}
 
 	/**

@@ -33,7 +33,7 @@ class MockFactory
 	private $mockedGlobalFunctions = array();
 
 	/**
-	 * @var array<string, mixed>
+	 * @var array<string, array <string, mixed>>
 	 */
 	private $methodsParameters = array();
 

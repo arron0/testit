@@ -9,12 +9,7 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 /**
- * MockGenerator class definition
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
+ * @method getMock(string $type, $methods = [], array $arguments = [], string $mockClassName = '', bool $callOriginalConstructor = true, bool $callOriginalClone = true, bool $callAutoload = true, bool $cloneArguments = true, bool $callOriginalMethods = false, object $proxyTarget = null, bool $allowMockingUnknownTypes = true, bool $returnValueGeneration = true)
  */
 class MockGenerator
 {
@@ -98,8 +93,17 @@ class MockGenerator
 		return join(', ', $parameters);
 	}
 
-	public function __call($name, $arguments)
+	/**
+	 * @param array<mixed> $arguments
+	 * @return mixed
+	 */
+	public function __call(string $name, array $arguments)
 	{
-		return call_user_func_array([$this->generator, $name], $arguments);
+		$callback = [$this->generator, $name];
+		if(is_callable($callback)) {
+			return call_user_func_array($callback, $arguments);
+		}
+
+		throw new \RuntimeException("Method $name not found in phpunit mock genrator");
 	}
 }
