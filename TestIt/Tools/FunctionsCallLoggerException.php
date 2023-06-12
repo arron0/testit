@@ -12,5 +12,4 @@ namespace Arron\TestIt\Tools;
  */
 class FunctionsCallLoggerException extends \PHPUnit\Framework\AssertionFailedError
 {
-
 }

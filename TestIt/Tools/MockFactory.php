@@ -2,8 +2,9 @@
 
 namespace Arron\TestIt\Tools;
 
+use PHPUnit\Framework\MockObject\Generator;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\Rule\AnyInvokedCount;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 use ReflectionClass;
 use ReflectionException;
@@ -32,7 +33,7 @@ class MockFactory
 	private $mockedGlobalFunctions = array();
 
 	/**
-	 * @var array<string, mixed>
+	 * @var array<string, array <string, mixed>>
 	 */
 	private $methodsParameters = array();
 
@@ -65,7 +66,7 @@ class MockFactory
 	protected function getMockGenerator()
 	{
 		if ($this->mockObjectGenerator === null) {
-			$this->mockObjectGenerator = new MockGenerator();
+			$this->mockObjectGenerator = new MockGenerator(new Generator());
 		}
 		return $this->mockObjectGenerator;
 	}

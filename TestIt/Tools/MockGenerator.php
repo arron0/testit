@@ -9,15 +9,19 @@ use ReflectionFunction;
 use ReflectionMethod;
 
 /**
- * MockGenerator class definition
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
+ * phpcs:disable
+ * @method getMock(string $type, $methods = [], array $arguments = [], string $mockClassName = '', bool $callOriginalConstructor = true, bool $callOriginalClone = true, bool $callAutoload = true, bool $cloneArguments = true, bool $callOriginalMethods = false, object $proxyTarget = null, bool $allowMockingUnknownTypes = true, bool $returnValueGeneration = true)
+ * phpcs:enable
  */
-class MockGenerator extends Generator
+class MockGenerator
 {
+	private Generator $generator;
+
+	public function __construct(Generator $generator)
+	{
+		$this->generator = $generator;
+	}
+
 	/**
 	 * Returns the parameters of a function or method.
 	 *
@@ -48,7 +52,7 @@ class MockGenerator extends Generator
 			if (!$forCall) {
 				if ($parameter->isArray()) {
 					$typeHint = 'array ';
-				} elseif (version_compare(PHP_VERSION, '5.4.0', '>=') && $parameter->isCallable()) {
+				} elseif ($parameter->isCallable()) {
 					$typeHint = 'callable ';
 				} else {
 					try {
@@ -89,5 +93,19 @@ class MockGenerator extends Generator
 		}
 
 		return join(', ', $parameters);
+	}
+
+	/**
+	 * @param array<mixed> $arguments
+	 * @return mixed
+	 */
+	public function __call(string $name, array $arguments)
+	{
+		$callback = [$this->generator, $name];
+		if (is_callable($callback)) {
+			return call_user_func_array($callback, $arguments);
+		}
+
+		throw new \RuntimeException("Method $name not found in phpunit mock genrator");
 	}
 }

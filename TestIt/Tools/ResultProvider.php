@@ -12,7 +12,7 @@ namespace Arron\TestIt\Tools;
  */
 class ResultProvider
 {
-	/** @var mixed[] */
+	/** @var array<string, array<mixed>> */
 	public static $preparedResult = array();
 
 	/**

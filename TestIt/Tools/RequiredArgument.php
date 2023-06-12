@@ -12,5 +12,4 @@ namespace Arron\TestIt\Tools;
  */
 class RequiredArgument
 {
-
 }

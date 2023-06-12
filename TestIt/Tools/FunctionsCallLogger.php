@@ -15,29 +15,33 @@ use PHPUnit\Framework\Assert;
 class FunctionsCallLogger
 {
 	/**
-	 * @var array<string, mixed>
+	 * @var array<string>
 	 */
-	private static $loggedCalls = array();
+	private static array $loggedCalledFunctions = [];
 
 	/**
-	 * @var array<string, mixed>
+	 * @var array<array<mixed>>
 	 */
-	private static $expectedCalls = array();
+	private static array $loggedCalledArguments = [];
+
+	/**
+	 * @var array<string>
+	 */
+	private static array $exceptedCalledFunctions = [];
+
+	/**
+	 * @var array<array<mixed>|null>
+	 */
+	private static array $expectedCalledArguments = [];
 
 	/**
 	 * @var string[]
 	 */
-	private static $passedFunctions = array();
+	private static array $passedFunctions = [];
 
-	/**
-	 * @var \Arron\TestIt\Tools\MockFactory
-	 */
-	private static $mockFactory;
+	private static ?MockFactory $mockFactory = null;
 
-	/**
-	 * @return \Arron\TestIt\Tools\MockFactory
-	 */
-	protected static function getMockFactory()
+	protected static function getMockFactory(): MockFactory
 	{
 		if (self::$mockFactory === null) {
 			self::$mockFactory = MockFactory::getInstance();
@@ -46,22 +50,18 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param string $identificator
-	 *
 	 * @return array<string, mixed>
 	 */
-	protected static function getFunctionArguments($identificator)
+	protected static function getFunctionArguments(string $identificator): array
 	{
 		return self::getMockFactory()->getMethodParameters($identificator);
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
 	 * @return mixed
 	 */
-	public static function __callStatic($name, array $arguments)
+	public static function __callStatic(string $name, array $arguments)
 	{
 		$functionName = str_replace('-', '::', $name);
 		return self::processFunctionCall($functionName, $arguments);
@@ -70,54 +70,40 @@ class FunctionsCallLogger
 	/**
 	 * @return string[]
 	 */
-	public static function getLoggedFunctions()
+	public static function getLoggedFunctions(): array
 	{
-		if (array_key_exists('functions', self::$loggedCalls)) {
-			return self::$loggedCalls['functions'];
-		}
-		return array();
+		return self::$loggedCalledFunctions;
 	}
 
 	/**
 	 * @return mixed[]
 	 */
-	public static function getLoggedArgumets()
+	public static function getLoggedArgumets(): array
 	{
-		if (array_key_exists('arguments', self::$loggedCalls)) {
-			return self::$loggedCalls['arguments'];
-		}
-		return array();
+		return self::$loggedCalledArguments;
 	}
 
 	/**
 	 * @return mixed[]
 	 */
-	public static function getExpectedFunctionArguments()
+	public static function getExpectedFunctionArguments(): array
 	{
-		if (array_key_exists('arguments', self::$expectedCalls)) {
-			return self::$expectedCalls['arguments'];
-		}
-		return array();
+		return self::$expectedCalledArguments;
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public static function getExpectedFunctions()
+	public static function getExpectedFunctions(): array
 	{
-		if (array_key_exists('functions', self::$expectedCalls)) {
-			return self::$expectedCalls['functions'];
-		}
-		return array();
+		return self::$exceptedCalledFunctions;
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
 	 * @return mixed
 	 */
-	public static function processFunctionCall($name, array $arguments)
+	public static function processFunctionCall(string $name, array $arguments)
 	{
 		self::logFunctionCall($name, $arguments);
 		self::validateFunctionCall($name, $arguments);
@@ -125,59 +111,41 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param string $name
-	 * @param mixed[] $arguments
-	 *
-	 * @return void
+	 * @param array<mixed> $arguments
 	 */
-	protected static function logFunctionCall($name, array $arguments)
+	protected static function logFunctionCall(string $name, array $arguments): void
 	{
 		self::logFunction($name);
 		self::logArguments($arguments);
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	protected static function logFunction($name)
+	protected static function logFunction(string $name): void
 	{
-		self::$loggedCalls['functions'][] = $name;
+		self::$loggedCalledFunctions[] = $name;
 	}
 
 	/**
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
 	 */
-	protected static function logArguments(array $arguments)
+	protected static function logArguments(array $arguments): void
 	{
-		self::$loggedCalls['arguments'][] = $arguments;
+		self::$loggedCalledArguments[] = $arguments;
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
-	 *
 	 * @throws FunctionsCallLoggerException
 	 */
-	protected static function validateFunctionCall($name, array $arguments)
+	protected static function validateFunctionCall(string $name, array $arguments): void
 	{
 		self::validateFunctionName($name, $arguments);
 		self::validateFunctionArguments($name, $arguments);
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
-	 *
 	 */
-	protected static function validateFunctionName($name, array $arguments)
+	protected static function validateFunctionName(string $name, array $arguments): void
 	{
 		$expectedName = self::getNextExpectedFunction();
 		if (is_null($expectedName)) {
@@ -197,12 +165,9 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
 	 */
-	protected static function validateFunctionArguments($name, array $arguments)
+	protected static function validateFunctionArguments(string $name, array $arguments): void
 	{
 		$expectedArguments = self::getNextExpectedArguments();
 
@@ -222,12 +187,10 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param string $functionName
 	 * @param mixed[] $functionArtuments
-	 *
 	 * @return mixed[]
 	 */
-	protected static function fillDefaultArguments($functionName, array $functionArtuments)
+	protected static function fillDefaultArguments(string $functionName, array $functionArtuments): array
 	{
 		$functionArguments = self::getFunctionArguments($functionName);
 
@@ -246,65 +209,49 @@ class FunctionsCallLogger
 	}
 
 	/**
-	 * @param string $functionName
-	 *
 	 * @return mixed
+	 * @throws \Exception
 	 */
-	public static function getResult($functionName)
+	public static function getResult(string $functionName)
 	{
 		return ResultProvider::getResultForFunction($functionName);
 	}
 
-	/**
-	 * @return string|null
-	 */
-	protected static function getNextExpectedFunction()
+	protected static function getNextExpectedFunction(): ?string
 	{
-		if (!array_key_exists('functions', self::$expectedCalls)) {
+		if (count(self::$exceptedCalledFunctions) < 1) {
 			return null;
 		}
 
-		if (!array_key_exists(0, self::$expectedCalls['functions'])) {
-			return null;
-		}
-		return array_shift(self::$expectedCalls['functions']);
+		return array_shift(self::$exceptedCalledFunctions);
 	}
 
 	/**
 	 * @return mixed[]|null
 	 */
-	protected static function getNextExpectedArguments()
+	protected static function getNextExpectedArguments(): ?array
 	{
-		if (!array_key_exists('arguments', self::$expectedCalls)) {
+		if (count(self::$expectedCalledArguments) < 1) {
 			return null;
 		}
 
-		if (!array_key_exists(0, self::$expectedCalls['arguments'])) {
-			return null;
-		}
-		return array_shift(self::$expectedCalls['arguments']);
+		return array_shift(self::$expectedCalledArguments);
 	}
 
 	/**
-	 * @param string $functionName
-	 * @param mixed[] $functionArguments
+	 * @param array<mixed> $functionArguments
 	 * @param mixed $expectedResult
-	 *
-	 * @return void
 	 */
-	public static function expectFunctionCall($functionName, array $functionArguments = null, $expectedResult = null)
+	public static function expectFunctionCall(string $functionName, array $functionArguments = null, $expectedResult = null): void
 	{
 		self::addExpectedFunctionCall($functionName, $functionArguments);
 		ResultProvider::addResultForFunction($functionName, $expectedResult);
 	}
 
 	/**
-	 * @param string $name
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
 	 */
-	protected static function addExpectedFunctionCall($name, array $arguments = null)
+	protected static function addExpectedFunctionCall(string $name, array $arguments = null): void
 	{
 		self::addExpectedFunction($name);
 		self::addExpectedArguments($arguments);
@@ -312,32 +259,27 @@ class FunctionsCallLogger
 
 	/**
 	 * @param string $name
-	 *
-	 * @return void
 	 */
-	protected static function addExpectedFunction($name)
+	protected static function addExpectedFunction(string $name): void
 	{
-		self::$expectedCalls['functions'][] = $name;
+		self::$exceptedCalledFunctions[] = $name;
 	}
 
 	/**
 	 * @param mixed[] $arguments
-	 *
-	 * @return void
 	 */
-	protected static function addExpectedArguments(array $arguments = null)
+	protected static function addExpectedArguments(array $arguments = null): void
 	{
-		self::$expectedCalls['arguments'][] = $arguments;
+		self::$expectedCalledArguments[] = $arguments;
 	}
 
-	/**
-	 * @return void
-	 */
-	public static function reset()
+	public static function reset(): void
 	{
-		self::$expectedCalls = array();
-		self::$loggedCalls = array();
-		self::$passedFunctions = array();
+		self::$exceptedCalledFunctions = [];
+		self::$expectedCalledArguments = [];
+		self::$loggedCalledFunctions = [];
+		self::$loggedCalledArguments = [];
+		self::$passedFunctions = [];
 		ResultProvider::reset();
 	}
 }

@@ -4,3 +4,4 @@
 /build
 /tests/coverage/*
 /composer.lock
+/tests/.phpunit.result.cache

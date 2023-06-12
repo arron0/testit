@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  app:
+    container_name: testit
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: 7.4
+    volumes:
+      - .:/var/www/html
+    stdin_open: true
+    tty: true
