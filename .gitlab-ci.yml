@@ -2,6 +2,7 @@ stages:
   - code style
   - static analysis
   - test
+  - release
 
 Code sniffer:
   stage: code style
@@ -35,3 +36,18 @@ Unit Tests PHP 7.4:
     key: $CI_COMMIT_SHORT_SHA
     paths:
       - vendor
+
+Github release:
+  stage: release
+  image:
+    name: alpine/git
+    entrypoint: ['']
+  when: manual
+  script:
+    - git clone $CI_REPOSITORY_URL
+    - cd ${CI_PROJECT_NAME}
+    - git remote add github https://${GITHUB_TOKEN}@github.com/arron0/testit.git
+    - git push github HEAD:master --tags
+  only:
+    - master
+    - tags
